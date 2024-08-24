@@ -1,0 +1,47 @@
+
+
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>http://localhost:4001/</id>
+  <title>Matt Black</title>
+  <subtitle>Matt Black. CoFounder @AtomicFinance. Boomer Millenial. Bitcoin not crypto. Nostr not blockchain.</subtitle>
+  <updated>2024-08-24T17:22:26-04:00</updated>
+  <author>
+    <name>Matt Black</name>
+    <uri>http://localhost:4001/</uri>
+  </author>
+  <link rel="self" type="application/atom+xml" href="http://localhost:4001/feed.xml"/>
+  <link rel="alternate" type="text/html" hreflang="en"
+    href="http://localhost:4001/"/>
+  <generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator>
+  <rights> © 2024 Matt Black </rights>
+  <icon>/assets/img/favicons/favicon.ico</icon>
+  <logo>/assets/img/favicons/favicon-96x96.png</logo>
+
+
+  
+  <entry>
+    <title>Fixing Lightning Force Closures</title>
+    <link href="http://localhost:4001/posts/fixing-lightning-force-closures/" rel="alternate" type="text/html" title="Fixing Lightning Force Closures" />
+    <published>2024-08-24T00:00:00-04:00</published>
+  
+    <updated>2024-08-24T00:00:00-04:00</updated>
+  
+    <id>http://localhost:4001/posts/fixing-lightning-force-closures/</id>
+    <content src="http://localhost:4001/posts/fixing-lightning-force-closures/" />
+    <author>
+      <name>Matt Black</name>
+    </author>
+
+  
+    
+    <category term="Lightning" />
+    
+  
+
+  <summary>How a Bitcoin fee spike caused Lightning force closures, and upcoming fixes to prevent them.</summary>
+
+  </entry>
+
+</feed>
+
+
