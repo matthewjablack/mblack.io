@@ -4,7 +4,7 @@
   <id>http://localhost:4001/</id>
   <title>Matt Black</title>
   <subtitle>Matt Black. CoFounder @AtomicFinance. Boomer Millenial. Bitcoin not crypto. Nostr not blockchain.</subtitle>
-  <updated>2024-08-24T17:38:36-04:00</updated>
+  <updated>2024-08-25T22:20:24-04:00</updated>
   <author>
     <name>Matt Black</name>
     <uri>http://localhost:4001/</uri>
@@ -24,7 +24,7 @@
     <link href="http://localhost:4001/posts/fixing-lightning-force-closures/" rel="alternate" type="text/html" title="Fixing Lightning Force Closures" />
     <published>2024-08-24T00:00:00-04:00</published>
   
-    <updated>2024-08-24T00:00:00-04:00</updated>
+    <updated>2024-08-24T17:38:47-04:00</updated>
   
     <id>http://localhost:4001/posts/fixing-lightning-force-closures/</id>
     <content src="http://localhost:4001/posts/fixing-lightning-force-closures/" />

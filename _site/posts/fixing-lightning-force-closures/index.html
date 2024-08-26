@@ -47,7 +47,7 @@
 <meta property="twitter:title" content="Fixing Lightning Force Closures" />
 <meta name="twitter:site" content="@matthewjablack" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2024-08-24T00:00:00-04:00","datePublished":"2024-08-24T00:00:00-04:00","description":"How a Bitcoin fee spike caused Lightning force closures, and upcoming fixes to prevent them.","headline":"Fixing Lightning Force Closures","image":{"lqip":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAGCAYAAAD68A/GAAAAAklEQVR4AewaftIAAADiSURBVAXBT0+CYADA4R+vhEkIBJnpMqfrzyEvrg9Q9gFalz5ox9bZu2u52arpXDrMSTiMeEGl51FuOp0sDAK265Ra65K7h3vm33Neul2yTUK/N0AIFVUma05bZ4itxDILPD0+oxcNfsMIY0+l2awSyQyRyhjdMKjXyoRRjBCQUzJ8f8ntdZvzizo7+V3UauOEr/EEpWLxM/HQ7DIkktXMo/c6ZDSaopsO6l/g4xyYlGwTKQe4qcJxtYLiagTegqNDlzjZIBwtR7RY8t7/JG+ZlNpXFOsNCvs2H29D4lXEZjblH6/3WVc4HwGeAAAAAElFTkSuQmCC","alt":"Fixing Lightning Force Closures","url":"https://i.imgur.com/GyqMFK3.png","@type":"imageObject"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4001/posts/fixing-lightning-force-closures/"},"url":"http://localhost:4001/posts/fixing-lightning-force-closures/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2024-08-24T17:38:47-04:00","datePublished":"2024-08-24T00:00:00-04:00","description":"How a Bitcoin fee spike caused Lightning force closures, and upcoming fixes to prevent them.","headline":"Fixing Lightning Force Closures","image":{"lqip":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAGCAYAAAD68A/GAAAAAklEQVR4AewaftIAAADiSURBVAXBT0+CYADA4R+vhEkIBJnpMqfrzyEvrg9Q9gFalz5ox9bZu2u52arpXDrMSTiMeEGl51FuOp0sDAK265Ra65K7h3vm33Neul2yTUK/N0AIFVUma05bZ4itxDILPD0+oxcNfsMIY0+l2awSyQyRyhjdMKjXyoRRjBCQUzJ8f8ntdZvzizo7+V3UauOEr/EEpWLxM/HQ7DIkktXMo/c6ZDSaopsO6l/g4xyYlGwTKQe4qcJxtYLiagTegqNDlzjZIBwtR7RY8t7/JG+ZlNpXFOsNCvs2H29D4lXEZjblH6/3WVc4HwGeAAAAAElFTkSuQmCC","alt":"Fixing Lightning Force Closures","url":"https://i.imgur.com/GyqMFK3.png","@type":"imageObject"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4001/posts/fixing-lightning-force-closures/"},"url":"http://localhost:4001/posts/fixing-lightning-force-closures/"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -797,6 +797,28 @@
 
       
     
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
 
     
   
@@ -812,17 +834,6 @@
       
         
         
-      
-
-      
-      
-
-      
-      
-      
-
-      
-    
       
 
       
@@ -912,6 +923,29 @@
 
       <!-- lastmod date -->
       
+        <span>
+          Updated
+          <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1724535527"
+  data-df="ll"
+  
+    data-bs-toggle="tooltip" data-bs-placement="bottom"
+  
+>
+  Aug 24, 2024
+</time>
+
+        </span>
+      
 
       
         
@@ -963,9 +997,9 @@
   class="readtime"
   data-bs-toggle="tooltip"
   data-bs-placement="bottom"
-  title="1051 words"
+  title="1113 words"
 >
-  <em>5 min</em> read</span>
+  <em>6 min</em> read</span>
 
         </div>
       </div>
@@ -1001,7 +1035,7 @@
   <p>“Hey there felipe! So lots of people were using Bitcoin and we had to shut down your channel. No worries, your BTC will be back in 14 days! Meanwhile, enjoy using the payment network without any capital”</p>
 </blockquote>
 
-<p>This is such a terrible user experience it’s not even funny. And it begs the question: <strong>is there a way to improve lightning so that force closes don’t happen every time a spike in mempool feerate spike occurs?</strong></p>
+<p>This is such a terrible user experience it’s not even funny. And it begs the question: <a href="https://x.com/matthewjablack/status/1826741851178832318"><strong>is there a way to improve lightning so that force closes don’t happen every time a spike in mempool feerate spike occurs?</strong></a></p>
 
 <h2 id="️-improvements-on-the-horizon"><span class="me-2">⚡️ Improvements on the horizon</span><a href="#️-improvements-on-the-horizon" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 
@@ -1049,17 +1083,27 @@ BN--&gt;&gt;U: Both Transactions Accepted
 
 <h3 id="-timeline"><span class="me-2">⏰ Timeline</span><a href="#-timeline" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
 
-<p>Unfortunately package relay is not in the Bitcoin Core release pipeline <a href="https://github.com/bitcoin/bitcoin/issues/27463">yet</a>. Hopefully there is a release candidate next month that has package relay. After that folks will need to start updating their Bitcoin nodes, and lightning implementations will need to be updated to support it. This means months, likely a year or more before package relay is reliable enough for everyone to switch to 0-fee commitment txes in their anchor commitment channels.</p>
+<p><strong>EDIT:</strong> Support for one-parent-one-child package relay is merged in the master branch of <a href="https://github.com/bitcoin/bitcoin/pull/27463">Bitcoin Core</a>, so it’ll be released with Bitcoin Core 28.0.</p>
+
+<blockquote>
+  <p>Unfortunately package relay is not in the Bitcoin Core release pipeline <a href="https://github.com/bitcoin/bitcoin/issues/27463">yet</a>. Hopefully there is a release candidate next month that has package relay. After that folks will need to start updating their Bitcoin nodes, and lightning implementations will need to be updated to support it. This means months, likely a year or more before package relay is reliable enough for everyone to switch to 0-fee commitment txes in their anchor commitment channels.</p>
+</blockquote>
 
 <h3 id="-package-relay-for-dlcs"><span class="me-2">🔮 Package Relay for DLCs</span><a href="#-package-relay-for-dlcs" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
 
 <p>Package relay is also incredibly useful for DLCs as well. Since a DLC on-chain is very similar to a lightning channel, and both parties must pre-commit to execution and refund transactions, package relay will allow either party to fee bump the execution transaction without worrying about the minimum relay feerate.</p>
 
-<h3 id="conclusion"><span class="me-2">Conclusion</span><a href="#conclusion" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+<h2 id="conclusion"><span class="me-2">Conclusion</span><a href="#conclusion" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 
 <p>Package relay will significantly reduce the risk of force closures due to feerate disagreements. By allowing transactions to be bundled and relayed together, it ensures that even if the initial transaction has a low fee, it can still be confirmed along with its child transaction. This improvement will make the Lightning Network more robust and user-friendly, as users won’t have to worry about their channels being force closed due to sudden fee spikes.</p>
 
 <p>Hopefully in a couple years, brutal user experience of <code class="language-plaintext highlighter-rouge">felipe</code> will be a thing of the past 🤞</p>
+
+<h2 id="credits"><span class="me-2">Credits</span><a href="#credits" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<p>Special thanks to <a href="https://x.com/niftynei/status/1826782262140014811">@niftynei</a>, <a href="https://x.com/roasbeef/status/1826746092190663053">@roasbeef</a>, <a href="https://x.com/jxpcsnmz/status/1826748241037459515">@jxpcsnmz</a>, and <a href="https://x.com/murchandamus/status/1827884828559052903">@murchandamus</a> for their helpful breakdown of the issue, and the proposals that will help fix it, that inspired this post.</p>
+
+<p>You can view their helpful responses within the original <a href="https://x.com/matthewjablack/status/1826741851178832318">x post</a>.</p>
 
   </div>
 

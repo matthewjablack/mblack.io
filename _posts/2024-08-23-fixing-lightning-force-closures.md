@@ -37,7 +37,7 @@ However, for the user this isn't obvious at all. **Imagine being a user, being i
 > "Hey there felipe! So lots of people were using Bitcoin and we had to shut down your channel. No worries, your BTC will be back in 14 days! Meanwhile, enjoy using the payment network without any capital"
 {: .prompt-warning }
 
-This is such a terrible user experience it's not even funny. And it begs the question: **is there a way to improve lightning so that force closes don't happen every time a spike in mempool feerate spike occurs?**
+This is such a terrible user experience it's not even funny. And it begs the question: [**is there a way to improve lightning so that force closes don't happen every time a spike in mempool feerate spike occurs?**](https://x.com/matthewjablack/status/1826741851178832318)
 
 ## ⚡️ Improvements on the horizon
 
@@ -88,14 +88,22 @@ With package relay, lightning nodes don't need to guess the future feerate. In f
 
 ### ⏰ Timeline
 
-Unfortunately package relay is not in the Bitcoin Core release pipeline [yet](https://github.com/bitcoin/bitcoin/issues/27463). Hopefully there is a release candidate next month that has package relay. After that folks will need to start updating their Bitcoin nodes, and lightning implementations will need to be updated to support it. This means months, likely a year or more before package relay is reliable enough for everyone to switch to 0-fee commitment txes in their anchor commitment channels.
+**EDIT:** Support for one-parent-one-child package relay is merged in the master branch of [Bitcoin Core](https://github.com/bitcoin/bitcoin/pull/27463), so it'll be released with Bitcoin Core 28.0.
+
+> Unfortunately package relay is not in the Bitcoin Core release pipeline [yet](https://github.com/bitcoin/bitcoin/issues/27463). Hopefully there is a release candidate next month that has package relay. After that folks will need to start updating their Bitcoin nodes, and lightning implementations will need to be updated to support it. This means months, likely a year or more before package relay is reliable enough for everyone to switch to 0-fee commitment txes in their anchor commitment channels.
 
 ### 🔮 Package Relay for DLCs
 
 Package relay is also incredibly useful for DLCs as well. Since a DLC on-chain is very similar to a lightning channel, and both parties must pre-commit to execution and refund transactions, package relay will allow either party to fee bump the execution transaction without worrying about the minimum relay feerate.
 
-### Conclusion
+## Conclusion
 
 Package relay will significantly reduce the risk of force closures due to feerate disagreements. By allowing transactions to be bundled and relayed together, it ensures that even if the initial transaction has a low fee, it can still be confirmed along with its child transaction. This improvement will make the Lightning Network more robust and user-friendly, as users won't have to worry about their channels being force closed due to sudden fee spikes.
 
 Hopefully in a couple years, brutal user experience of `felipe` will be a thing of the past 🤞
+
+## Credits
+
+Special thanks to [@niftynei](https://x.com/niftynei/status/1826782262140014811), [@roasbeef](https://x.com/roasbeef/status/1826746092190663053), [@jxpcsnmz](https://x.com/jxpcsnmz/status/1826748241037459515), and [@murchandamus](https://x.com/murchandamus/status/1827884828559052903) for their helpful breakdown of the issue, and the proposals that will help fix it, that inspired this post.
+
+You can view their helpful responses within the original [x post](https://x.com/matthewjablack/status/1826741851178832318).
