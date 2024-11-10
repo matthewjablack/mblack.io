@@ -88,7 +88,9 @@ With package relay, lightning nodes don't need to guess the future feerate. In f
 
 ### ⏰ Timeline
 
-**EDIT:** Support for one-parent-one-child package relay is merged in the master branch of [Bitcoin Core](https://github.com/bitcoin/bitcoin/pull/27463), so it'll be released with Bitcoin Core 28.0.
+**EDIT:** Support for one-parent-one-child (1p1c) package relay is merged in the master branch of [Bitcoin Core](https://github.com/bitcoin/bitcoin/pull/27463), so it'll be released with Bitcoin Core 28.0.
+
+**EDIT2**: In 1p1c, the parent still needs to beat the minimum relay feerate. However it can be below the mempools dynamic minimum feerate (the purging rate). Therefore the commitment transaction needs to pay 1 sat/vB (thanks @murch)
 
 > Unfortunately package relay is not in the Bitcoin Core release pipeline [yet](https://github.com/bitcoin/bitcoin/issues/27463). Hopefully there is a release candidate next month that has package relay. After that folks will need to start updating their Bitcoin nodes, and lightning implementations will need to be updated to support it. This means months, likely a year or more before package relay is reliable enough for everyone to switch to 0-fee commitment txes in their anchor commitment channels.
 
