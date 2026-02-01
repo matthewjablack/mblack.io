@@ -19,8 +19,8 @@ In our last Discreet Log Contract [post](/posts/discreet-log-contracts-part-1-wh
 
 - [Part 1 – What Is A Discreet Log Contract](/posts/discreet-log-contracts-part-1-what-is-a-discreet-log-contract/)
 - Part 2 – How They Work [Adaptor Version] (this post)
-- [Part 3 – Why Discreet Log Contracts Are Great](https://web.archive.org/web/20231130175441/https://suredbits.com/discreet-log-contracts-part-3-why-discreet-log-contracts-are-great/)
-- [Part 4 – Security and Trust Model](https://web.archive.org/web/20231130175441/https://suredbits.com/discreet-log-contracts-part-4-security-and-trust-model/)
+- [Part 3 – Why Discreet Log Contracts Are Great](/posts/discreet-log-contracts-part-3-why-they-are-great/)
+- [Part 4 – Security and Trust Model](/posts/discreet-log-contracts-part-4-security-and-trust-model/)
 
 As the name suggests, DLCs are based on the Discrete Log Problem (DLP). In this context, we are specifically interested in the Elliptic Curve DLP which is used by the Bitcoin protocol. This means we can be sure we aren't adding to our set of cryptographic assumptions.
 

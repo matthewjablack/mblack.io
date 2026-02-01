@@ -18,9 +18,9 @@ Previously we have analyzed Discreet Log Contracts (DLCs) at a high level and br
 ## Discreet Log Contracts Series:
 
 - Part 1 – What is a Discreet Log Contract? (this post)
-- [Part 2 – How Discreet Log Contracts Work](https://web.archive.org/web/20231130171312/https://suredbits.com/discreet-log-contracts-part-2-how-discreet-log-contracts-work/)
-- [Part 3 – Why Discreet Log Contracts Are Great](https://web.archive.org/web/20231130171312/https://suredbits.com/discreet-log-contracts-part-3-why-discreet-log-contracts-are-great/)
-- [Part 4 – Security and Trust Model](https://web.archive.org/web/20231130171312/https://suredbits.com/discreet-log-contracts-part-4-security-and-trust-model/)
+- [Part 2 – How Discreet Log Contracts Work](/posts/discreet-log-contracts-part-2-how-they-work/)
+- [Part 3 – Why Discreet Log Contracts Are Great](/posts/discreet-log-contracts-part-3-why-they-are-great/)
+- [Part 4 – Security and Trust Model](/posts/discreet-log-contracts-part-4-security-and-trust-model/)
 
 A Discreet Log Contract is a "simple" oracle contract scheme proposed by [Tadge Dryja of MIT](https://dci.mit.edu/tadge-dryja). DLCs can be executed using almost any blockchain, including Bitcoin. An oracle contract starts with users locking up the funds involved. Then those funds are spent based on some external outcome, which is broadcasted by an oracle. The naive approach of implementing this as a traditional smart contract on a smart contracting platform, such as Ethereum, has many drawbacks.
 
