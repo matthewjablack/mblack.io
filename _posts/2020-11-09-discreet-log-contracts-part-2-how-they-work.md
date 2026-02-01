@@ -13,11 +13,11 @@ categories: [Bitcoin, DLCs, Smart Contracts]
 
 ---
 
-In our last Discreet Log Contract [post](/bitcoin/dlcs/smart%20contracts/2019/09/05/discreet-log-contracts-part-1-what-is-a-discreet-log-contract.html), we explored the problems faced by most existing smart contracts as well as what Discrete Log Contracts (DLCs) are at a high level. In this post we will detail what exactly what it takes to execute a DLC as well as the many benefits we reap for doing so.
+In our last Discreet Log Contract [post](/bitcoin/dlcs/smart contracts/2019/09/05/discreet-log-contracts-part-1-what-is-a-discreet-log-contract.html), we explored the problems faced by most existing smart contracts as well as what Discrete Log Contracts (DLCs) are at a high level. In this post we will detail what exactly what it takes to execute a DLC as well as the many benefits we reap for doing so.
 
 ## Discreet Log Contracts Series:
 
-- [Part 1 – What Is A Discreet Log Contract](/bitcoin/dlcs/smart%20contracts/2019/09/05/discreet-log-contracts-part-1-what-is-a-discreet-log-contract.html)
+- [Part 1 – What Is A Discreet Log Contract](/bitcoin/dlcs/smart contracts/2019/09/05/discreet-log-contracts-part-1-what-is-a-discreet-log-contract.html)
 - Part 2 – How They Work [Adaptor Version] (this post)
 - [Part 3 – Why Discreet Log Contracts Are Great](https://web.archive.org/web/20231130175441/https://suredbits.com/discreet-log-contracts-part-3-why-discreet-log-contracts-are-great/)
 - [Part 4 – Security and Trust Model](https://web.archive.org/web/20231130175441/https://suredbits.com/discreet-log-contracts-part-4-security-and-trust-model/)
