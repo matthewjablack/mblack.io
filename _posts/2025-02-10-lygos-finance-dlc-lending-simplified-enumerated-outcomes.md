@@ -1,13 +1,14 @@
 ---
-layout: post
-title: "Lygos Finance DLC Lending: Why We Use 4 Enumerated Outcomes Instead of Numeric Payout Curves"
+title: DLCs are perfect for Lending
+description: >-
+  Why We Use 4 Enumerated Outcomes Instead of Numeric Payout Curves at Lygos
 date: 2025-02-10
 categories: [Bitcoin, DLCs, Lending]
 mermaid: true
 image:
   path: /xEBhTzI.png
   lqip: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAGCAMAAAAmGUT3AAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAACfUExURQQCAQ0HBAgFAyofFpV4WzgsIggFAgoGBA8JBQkHB0kzH8eLQ2FGKwsJCBEKBgwIBBgPCCMTCSYVC141E6BVFHE/FCcWDCgVCRsQCSIRCGM0EYZVI4xVH4FNH45WIIlWImU0DyQRBx0LBYtLF6BhI7FyK3ZIIbFwK6VjIpJPFigRBwwHBCgXCkclDn1GG0ksGnRCG1UrDzYeDRUMB////y3L2rsAAAABYktHRDSpsen9AAAAB3RJTUUH6gIKER8V0xUCcgAAAENJREFUCFsFwQMCwDAABLBrZ3a2bf7/b00AQgVRkgmgqJpumJbN4LieH4RRnCDN8qKs6qZF1w/jNC/rhv04r/t5v58DY40FMP4j7RMAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjYtMDItMTBUMTc6MzE6MTkrMDA6MDBCEV6cAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDI2LTAyLTEwVDE3OjMwOjQyKzAwOjAwlmnXgAAAACh0RVh0ZGF0ZTp0aW1lc3RhbXAAMjAyNi0wMi0xMFQxNzozMToyMSswMDowMNk5jnsAAAAASUVORK5CYII=
-  alt: Lygos Finance DLC Lending: Why We Use 4 Enumerated Outcomes Instead of Numeric Payout Curves
+  alt: Why We Use 4 Enumerated Outcomes Instead of Numeric Payout Curves at Lygos
 ---
 
 *This post explores the unique technical approach Lygos Finance takes with DLC-based lending, specifically our decision to use enumerated outcomes instead of numeric payout curves.*
