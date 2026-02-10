@@ -24,7 +24,7 @@ It would take **one to two minutes** just to enter a contract. The computational
 > **Imagine being a user:** "Please wait 2 minutes while we generate 10,000 adaptor signatures for every possible BTC price between $10k and $200k..."
 {: .prompt-warning }
 
-When we started [building Lygos Finance](https://blog.lygos.finance/the-evolution-from-atomic-options-to-lygos-credit/) for DLC-based lending, we took a step back and asked: do we actually need all that complexity?
+When we started building [Lygos Finance](https://blog.lygos.finance/the-evolution-from-atomic-options-to-lygos-credit/) for DLC-based lending, we took a step back and asked: do we actually need all that complexity?
 
 ## 🧠 The Insight: Loans Have Simple Outcomes
 
