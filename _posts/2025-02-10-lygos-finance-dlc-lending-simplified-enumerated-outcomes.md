@@ -17,7 +17,7 @@ image:
 
 When we built Atomic Finance, we implemented DLCs the way most people think about them: with numeric payout curves that represent every possible outcome. For options contracts and derivatives, you'd create thousands of pre-signed transactions to cover every potential price point. The math was elegant, but the user experience wasn't.
 
-![Screenshot of Atomic Finance DLC entering process taking 2+ mins](https://i.imgur.com/P6DxkAL.jpeg)
+![Screenshot of Atomic Finance DLC entering process taking 2+ mins](https://i.imgur.com/P6DxkAL.jpeg){: w="400" }
 
 It would take **one to two minutes** just to enter a contract. The computational overhead of generating all those [adaptor signatures](/posts/schnorr-applications-scriptless-scripts/) was significant. And for users trying to verify what they were signing? Good luck parsing through thousands of potential outcomes.
 
