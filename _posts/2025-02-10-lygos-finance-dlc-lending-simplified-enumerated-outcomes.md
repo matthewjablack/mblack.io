@@ -4,6 +4,10 @@ title: "Lygos Finance DLC Lending: Why We Use 4 Enumerated Outcomes Instead of N
 date: 2025-02-10
 categories: [Bitcoin, DLCs, Lending]
 mermaid: true
+image:
+  path: /xEBhTzI.png
+  lqip: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAGCAMAAAAmGUT3AAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAACfUExURQQCAQ0HBAgFAyofFpV4WzgsIggFAgoGBA8JBQkHB0kzH8eLQ2FGKwsJCBEKBgwIBBgPCCMTCSYVC141E6BVFHE/FCcWDCgVCRsQCSIRCGM0EYZVI4xVH4FNH45WIIlWImU0DyQRBx0LBYtLF6BhI7FyK3ZIIbFwK6VjIpJPFigRBwwHBCgXCkclDn1GG0ksGnRCG1UrDzYeDRUMB////y3L2rsAAAABYktHRDSpsen9AAAAB3RJTUUH6gIKER8V0xUCcgAAAENJREFUCFsFwQMCwDAABLBrZ3a2bf7/b00AQgVRkgmgqJpumJbN4LieH4RRnCDN8qKs6qZF1w/jNC/rhv04r/t5v58DY40FMP4j7RMAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjYtMDItMTBUMTc6MzE6MTkrMDA6MDBCEV6cAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDI2LTAyLTEwVDE3OjMwOjQyKzAwOjAwlmnXgAAAACh0RVh0ZGF0ZTp0aW1lc3RhbXAAMjAyNi0wMi0xMFQxNzozMToyMSswMDowMNk5jnsAAAAASUVORK5CYII=
+  alt: Lygos Finance DLC Lending: Why We Use 4 Enumerated Outcomes Instead of Numeric Payout Curves
 ---
 
 *This post explores the unique technical approach Lygos Finance takes with DLC-based lending, specifically our decision to use enumerated outcomes instead of numeric payout curves.*
@@ -12,11 +16,16 @@ mermaid: true
 
 When we built Atomic Finance, we implemented DLCs the way most people think about them: with numeric payout curves that represent every possible outcome. For options contracts and derivatives, you'd create thousands of pre-signed transactions to cover every potential price point. The math was elegant, but the user experience wasn't.
 
-It would take one to two minutes just to enter a contract. The computational overhead of generating all those adaptor signatures was significant. And for users trying to verify what they were signing? Good luck parsing through thousands of potential outcomes.
+![Screenshot of Atomic Finance DLC entering process taking 2+ mins](https://i.imgur.com/P6DxkAL.jpeg)
+
+It would take **one to two minutes** just to enter a contract. The computational overhead of generating all those [adaptor signatures](/posts/schnorr-applications-scriptless-scripts/) was significant. And for users trying to verify what they were signing? Good luck parsing through thousands of potential outcomes.
+
+> **Imagine being a user:** "Please wait 2 minutes while we generate 10,000 adaptor signatures for every possible BTC price between $10k and $200k..."
+{: .prompt-warning }
 
 When we started building Lygos Finance for DLC-based lending, we took a step back and asked: do we actually need all that complexity?
 
-## The Insight: Loans Have Simple Outcomes
+## 🧠 The Insight: Loans Have Simple Outcomes
 
 For a Bitcoin-collateralized loan, there are really only four things that can happen to your collateral:
 
@@ -40,11 +49,14 @@ flowchart LR
     D --> Borrower
 ```
 
-That's it. Four outcomes.
+That's it. **Four outcomes.**
+
+> "Why sign thousands of transactions when a loan only has four possible endings?"
+{: .prompt-tip }
 
 In the past, DLC implementations would create numeric payout curves with signatures for every possible price point. But for lending, we don't need a complex curve mapping price to payout ratio. We need binary decisions: was the loan funded? Did the borrower repay? Did the price cross the liquidation threshold? Did the loan mature unpaid?
 
-## Enumerated vs. Numeric DLCs
+## 🔢 Enumerated vs. Numeric DLCs
 
 Traditional numeric DLCs work like this: you define a payout function that maps oracle-attested values (like BTC price) to how funds should be distributed. The protocol generates adaptor signatures for every point on that curve—potentially thousands or tens of thousands of signatures.
 
@@ -67,16 +79,16 @@ flowchart TB
 
 Enumerated DLCs are simpler: you define discrete outcomes, and the oracle attests to which outcome occurred. For our four-outcome model, the oracle simply attests "not-funded", "repaid", "liquidated-by-price", or "liquidated-by-maturity".
 
-The difference in practice is dramatic:
+The difference in practice is dramatic 👇
 
 | Metric | Numeric DLC | Enumerated DLC |
 |--------|-------------|----------------|
-| Setup time | 1-2 minutes | ~5 seconds |
-| Signatures | 1,000+ | 4 |
-| User verification | Complex curve | 4 clear outcomes |
-| Hardware wallet support | Impractical | Possible |
+| Setup time | 1-2 minutes | **~5 seconds** |
+| Signatures | 1,000+ | **4** |
+| User verification | Complex curve | **4 clear outcomes** |
+| Hardware wallet support | Impractical | **Possible** ✅ |
 
-## How the DLC Loan Works
+## ⚙️ How the DLC Loan Works
 
 Here's the complete flow of a Lygos DLC loan:
 
@@ -84,7 +96,7 @@ Here's the complete flow of a Lygos DLC loan:
 sequenceDiagram
     participant B as Borrower
     participant L as Lender
-    participant O as Oracle (Magnolia)
+    participant O as Oracle
     participant BC as Bitcoin
 
     Note over B,L: Setup Phase
@@ -116,9 +128,9 @@ sequenceDiagram
     end
 ```
 
-## Making It Easy to Verify
+## 🔎 Making It Easy to Verify
 
-One of the biggest advantages of this approach is transparency. When you're entering a DLC loan with Lygos, you can look at exactly four pre-signed transactions and understand precisely what happens to your Bitcoin in each case.
+One of the biggest advantages of this approach is **transparency**. When you're entering a DLC loan with Lygos, you can look at exactly **four pre-signed transactions** and understand precisely what happens to your Bitcoin in each case.
 
 ```mermaid
 flowchart LR
@@ -135,15 +147,15 @@ Compare this to a numeric DLC where you'd need to verify the correctness of a co
 
 It's also much easier to verify Oracle behavior. With four discrete outcomes, you can easily check whether the Oracle attested correctly to the actual outcome. Did the lender fail to fund within 48 hours? The Oracle should attest "not-funded". Did you repay the loan? The Oracle should attest "repaid". Did the price cross the liquidation threshold? The Oracle should attest "liquidated-by-price". There's no ambiguity about interpolation along a curve or rounding at boundary conditions.
 
-## The Oracle Advantage
+## 🔮 The Oracle Advantage
 
-The enumerated approach also changes how the Oracle operates. Instead of needing to attest to precise price values and having the DLC derive payouts from a curve, our Oracle (Magnolia) simply needs to attest to which of the four events occurred.
+The enumerated approach also changes how the Oracle operates. Instead of needing to attest to precise price values and having the DLC derive payouts from a curve, our Oracle ([Magnolia](https://magnolia.financial/)) simply needs to attest to which of the four events occurred.
 
 ```mermaid
 flowchart TB
     subgraph Oracle["Oracle Responsibilities"]
         direction LR
-        O[Magnolia Oracle]
+        O[Oracle]
     end
 
     subgraph Events["Events to Monitor"]
@@ -166,9 +178,12 @@ flowchart TB
 
 This makes the Oracle's job cleaner: observe whether the loan was funded within 48 hours, whether the loan was repaid (by checking stablecoin transactions), whether the price crossed the liquidation threshold, or whether the maturity date passed with an unpaid balance. No complex calculations, just straightforward event attestation.
 
-The Oracle doesn't need to know who the borrower and lender are. They don't need to know the contract addresses or payout addresses. They just need to publish attestations for the loan outcomes, which either party can use to unlock the DLC.
+The Oracle **doesn't need to know** who the borrower and lender are. They don't know the contract addresses. They don't know the payout addresses. They just publish attestations—**that's it**.
 
-## DLC vs. Multi-sig Arbiter
+> The Oracle doesn't know who you are, where your Bitcoin is going, or even that a loan exists. They just publish attestations.
+{: .prompt-info }
+
+## ⚔️ DLC vs. Multi-sig Arbiter
 
 Why not just use a 2-of-3 multi-sig with an arbiter? Here's how they compare:
 
@@ -194,18 +209,18 @@ flowchart TB
 
 With an arbiter system, at the time of execution, the arbiter needs to make a judgment call: what actually happened? They need to communicate with the parties, evaluate evidence, and actively sign a transaction. This introduces timing risk and trust in the arbiter's judgment.
 
-With DLCs, the Oracle simply attests to objective facts. The outcome transactions are already pre-signed—the Oracle's attestation just reveals which one is valid.
+With DLCs, the Oracle simply attests to **objective facts**. The outcome transactions are already pre-signed—the Oracle's attestation just reveals which one is valid. No judgment calls, no communication with parties, no timing risk.
 
-## Preserving DLC Benefits
+## 💎 Preserving DLC Benefits
 
 Despite the simplification, we maintain all the core benefits of DLCs:
 
 - **Non-custodial**: The Bitcoin sits in a 2-of-2 multisig between borrower and lender, with pre-signed outcome transactions
-- **Privacy**: The Oracle doesn't know the contract parties, and on-chain the transaction looks like any other 2-of-2 multisig (similar to a Lightning channel)
+- **Privacy**: The Oracle doesn't know the contract parties, and on-chain the transaction looks like any other [2-of-2 multisig](https://en.bitcoin.it/wiki/Multi-signature) (similar to a [Lightning channel](/posts/fixing-lightning-force-closures/))
 - **Refund path**: If both Lygos and the Oracle disappear, there's still a time-locked refund transaction that returns your Bitcoin
 - **Cooperative flexibility**: Since it's fundamentally a 2-of-2 multisig, borrowers and lenders can cooperatively modify terms, add collateral, or roll over loans
 
-## Why This Matters for Scale
+## 🚀 Why This Matters for Scale
 
 The enumerated approach isn't just a nice optimization—it's what makes DLC lending practical at scale.
 
@@ -224,17 +239,17 @@ flowchart LR
     end
 ```
 
-With adaptor signatures being computationally intensive, limiting ourselves to four of them means we can run on hardware wallets and integrate with institutional custody solutions. We're not asking a Ledger to grind through thousands of signatures; we're asking it to sign four transactions.
+With [adaptor signatures](/posts/schnorr-applications-scriptless-scripts/) being computationally intensive, limiting ourselves to four of them means we can run on **hardware wallets** and integrate with **institutional custody solutions**. We're not asking a Ledger to grind through thousands of signatures; we're asking it to sign **four transactions**.
 
 This opens up DLC lending to borrowers who (rightfully) don't want to keep private keys for significant amounts of Bitcoin on an internet-connected device. It opens integration with custodians who can now offer DLC-based products to their clients.
 
-## Looking Forward
+## 🔭 Looking Forward
 
-The four-outcome enumerated model works well for bilateral lending. It's simple, verifiable, and fast.
+The four-outcome enumerated model works well for bilateral lending. It's **simple**, **verifiable**, and **fast**.
 
-If Bitcoin ever gets covenant opcodes like CTV or TXHASH, those complex payout curves could become practical again—you wouldn't need to pre-sign thousands of transactions because the covenant would enforce the payout function directly. But for now, with Bitcoin as it exists today, the enumerated approach is the right tool for lending.
+If Bitcoin ever gets covenant opcodes like [CTV](https://github.com/bitcoin/bips/blob/master/bip-0119.mediawiki) or [TXHASH](https://github.com/bitcoin/bips/blob/master/bip-0470.md), those complex payout curves could become practical again—you wouldn't need to pre-sign thousands of transactions because the covenant would enforce the payout function directly. But for now, with Bitcoin as it exists today, the enumerated approach is the right tool for lending.
 
-Sometimes the best technical solution isn't the most complex one. For DLC-based lending, four outcomes is all you need.
+Sometimes the best technical solution isn't the most complex one. For DLC-based lending, **four outcomes is all you need**.
 
 ---
 
