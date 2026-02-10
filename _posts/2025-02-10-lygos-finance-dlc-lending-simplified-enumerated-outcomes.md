@@ -15,7 +15,7 @@ image:
 
 ---
 
-When we built Atomic Finance, we implemented DLCs the way most people think about them: with numeric payout curves that represent every possible outcome. For options contracts and derivatives, you'd create thousands of pre-signed transactions to cover every potential price point. The math was elegant, but the user experience wasn't.
+When we built [Atomic Finance](https://atomic.finance), we implemented [DLCs](https://atomic.finance/blog/discreet-log-contracts/) the way most people think about them: with [numeric payout curves](https://github.com/discreetlogcontracts/dlcspecs/blob/master/NumericOutcome.md) that represent every possible outcome. For options contracts and derivatives, you'd create thousands of pre-signed transactions to cover every potential price point. The math was elegant, but the user experience wasn't.
 
 ![Screenshot of Atomic Finance DLC entering process taking 2+ mins](https://i.imgur.com/P6DxkAL.jpeg){: w="400" }
 
@@ -24,7 +24,7 @@ It would take **one to two minutes** just to enter a contract. The computational
 > **Imagine being a user:** "Please wait 2 minutes while we generate 10,000 adaptor signatures for every possible BTC price between $10k and $200k..."
 {: .prompt-warning }
 
-When we started building Lygos Finance for DLC-based lending, we took a step back and asked: do we actually need all that complexity?
+When we started [building Lygos Finance](https://blog.lygos.finance/the-evolution-from-atomic-options-to-lygos-credit/) for DLC-based lending, we took a step back and asked: do we actually need all that complexity?
 
 ## 🧠 The Insight: Loans Have Simple Outcomes
 
@@ -55,11 +55,11 @@ That's it. **Four outcomes.**
 > "Why sign thousands of transactions when a loan only has four possible endings?"
 {: .prompt-tip }
 
-In the past, DLC implementations would create numeric payout curves with signatures for every possible price point. But for lending, we don't need a complex curve mapping price to payout ratio. We need binary decisions: was the loan funded? Did the borrower repay? Did the price cross the liquidation threshold? Did the loan mature unpaid?
+In the past, DLC implementations would create numeric [payout curves](https://github.com/discreetlogcontracts/dlcspecs/blob/master/PayoutCurve.md) with signatures for every possible price point. But for lending, we don't need a [complex curve](https://github.com/discreetlogcontracts/dlcspecs/blob/master/NumericOutcomeCompression.md) mapping price to payout ratio. We need binary decisions: was the loan funded? Did the borrower repay? Did the price cross the liquidation threshold? Did the loan mature unpaid?
 
 ## 🔢 Enumerated vs. Numeric DLCs
 
-Traditional numeric DLCs work like this: you define a payout function that maps oracle-attested values (like BTC price) to how funds should be distributed. The protocol generates adaptor signatures for every point on that curve—potentially thousands or tens of thousands of signatures.
+Traditional numeric DLCs work like this: you define a [payout function](https://note.com/crypto_garage/n/n1f07f2b4d805) that maps oracle-attested values (like BTC price) to how funds should be distributed. The protocol generates adaptor signatures for every point on that curve—potentially thousands or tens of thousands of signatures.
 
 ```mermaid
 flowchart TB
@@ -146,7 +146,7 @@ flowchart LR
 
 Compare this to a numeric DLC where you'd need to verify the correctness of a complex payout curve across thousands of potential outcomes. The enumerated model makes it trivial for borrowers to verify: "In this scenario, my Bitcoin goes here. In that scenario, it goes there."
 
-It's also much easier to verify Oracle behavior. With four discrete outcomes, you can easily check whether the Oracle attested correctly to the actual outcome. Did the lender fail to fund within 48 hours? The Oracle should attest "not-funded". Did you repay the loan? The Oracle should attest "repaid". Did the price cross the liquidation threshold? The Oracle should attest "liquidated-by-price". There's no ambiguity about interpolation along a curve or rounding at boundary conditions.
+It's also much easier to verify Oracle behavior. With four discrete outcomes, you can easily check whether the Oracle attested correctly to the actual outcome. Did the lender fail to fund within 48 hours? The [Oracle](https://github.com/discreetlogcontracts/dlcspecs/blob/master/Oracle.md) should attest "not-funded". Did you repay the loan? The Oracle should attest "repaid". Did the price cross the liquidation threshold? The Oracle should attest "liquidated-by-price". There's no ambiguity about interpolation along a curve or rounding at boundary conditions.
 
 ## 🔮 The Oracle Advantage
 
@@ -218,7 +218,7 @@ Despite the simplification, we maintain all the core benefits of DLCs:
 
 - **Non-custodial**: The Bitcoin sits in a 2-of-2 multisig between borrower and lender, with pre-signed outcome transactions
 - **Privacy**: The Oracle doesn't know the contract parties, and on-chain the transaction looks like any other [2-of-2 multisig](https://en.bitcoin.it/wiki/Multi-signature) (similar to a [Lightning channel](/posts/fixing-lightning-force-closures/))
-- **Refund path**: If both Lygos and the Oracle disappear, there's still a time-locked refund transaction that returns your Bitcoin
+- **Refund path**: If both Lygos and the Oracle disappear, there's still a time-locked refund transaction that [returns your Bitcoin](https://blog.lygos.finance/worst-case-ill-get-my-bitcoin-back/)
 - **Cooperative flexibility**: Since it's fundamentally a 2-of-2 multisig, borrowers and lenders can cooperatively modify terms, add collateral, or roll over loans
 
 ## 🚀 Why This Matters for Scale
