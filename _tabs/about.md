@@ -6,7 +6,7 @@ order: 4
 
 ## Hi, I'm Matt Black.
 
-I'm the cofounder of [Lygos Finance](https://lygos.finance), a company building Bitcoin-backed lending infrastructure using using [Discreet Log Contracts (DLCs)](https://github.com/discreetlogcontracts/dlcspecs/).
+I'm the cofounder of [Lygos Finance](https://lygos.finance), a company building Bitcoin-backed lending infrastructure using [Discreet Log Contracts (DLCs)](https://github.com/discreetlogcontracts/dlcspecs/).
 
 Previously, I cofounded [Atomic Finance](https://atomic.finance), a bitcoin defi company focused on building non-custodial financial tools using DLCs.
 
