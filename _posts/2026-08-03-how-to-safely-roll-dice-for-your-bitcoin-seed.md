@@ -330,7 +330,10 @@ Note the distinction: the pure **Dice Roll** mode derives the seed *only* from y
 
 **2. An offline copy of iancoleman's BIP39 tool.** Open [iancoleman.io/bip39](https://iancoleman.io/bip39/), File → Save As, move the file to an air-gapped machine, open it there. Or download the [signed GitHub release](https://github.com/iancoleman/bip39/releases/latest) and verify it first. Use the Entropy field, set the type to dice, and set **Mnemonic Length** to 12 or 24, not `Raw`. In that mode it matches Coldcard exactly, and 50/100 rolls is the right target. Ignore the weak-entropy warning at 50 rolls; as covered above, it's measuring raw-mode yield rather than what your dice actually carry.
 
-**3. Any other signer with a dice mode.** SeedSigner, Krux, Jade. Just confirm which conversion it uses before trusting a roll count, because as we just saw, they don't agree.
+**3. Another signer with a dice mode.** SeedSigner and Keystone use exactly the same construction as Coldcard, so 50/100 rolls applies and all three cross-verify against each other. **Krux does not**: it joins your rolls with dashes before hashing, so identical dice give a different seed. BitBox02 and Jade use a different approach entirely, a printed diceware table where you look up each word by hand.
+
+> Trezor and Ledger have no dice input at all, and that does **not** rule you out. Generate the words on something else and import them. See [How to Use Dice With a Trezor, a Ledger, or Any Other Wallet]({% post_url 2026-08-03-dice-for-a-trezor-ledger-or-any-wallet %}) for the per-tool comparison and the import steps.
+{: .prompt-info }
 
 > Do not use the live iancoleman.io page in a normal browser for a seed you intend to fund. Do not use any web-based generator. Every browser extension you have installed can read that page, and so can anything else on a networked machine.
 {: .prompt-danger }

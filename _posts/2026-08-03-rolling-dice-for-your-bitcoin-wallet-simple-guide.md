@@ -27,7 +27,7 @@ Dice fix this completely. When you roll dice, **you** make the random number. Th
 
 - **One or more six-sided dice.** Casino dice (the sharp-edged translucent ones) are about $10 for a set and are made to be fair. A cheap board-game die is *probably* fine but is slightly weighted by its scooped-out dots. If you're securing real money, buy the good ones.
 - **Pen and paper.** Not your phone. Not a notes app.
-- **A hardware wallet with a dice option.** Coldcard, SeedSigner, Krux and Jade all have one. So does an offline copy of a tool called iancoleman's BIP39 page.
+- **Something that turns dice into words.** Coldcard, SeedSigner and Keystone all do this on the device. So does an offline copy of a tool called iancoleman's BIP39 page. It does **not** have to be the wallet you plan to keep your Bitcoin in (see below).
 - **A hard, flat surface**, ideally with something to bounce the dice off.
 
 ## 🎯 Step 1: Roll 100 times
@@ -162,6 +162,9 @@ On a Coldcard: **New Seed Words → Advanced → 24 Word Dice Roll**, then press
 Other wallets put it in a similar place. Look for "dice" when creating a new seed.
 
 Type all 100. The device will then show you your seed words.
+
+> **What if my wallet has no dice option?** Trezor and Ledger don't have one, and it doesn't matter. Generate the words on something that does, write them down, and then type those words into your Trezor or Ledger using its normal "restore from recovery phrase" option. The words work in any wallet. Full instructions: [How to Use Dice With a Trezor, a Ledger, or Any Other Wallet]({% post_url 2026-08-03-dice-for-a-trezor-ledger-or-any-wallet %}).
+{: .prompt-info }
 
 > Do this on the device itself, or on a computer that is switched off from the internet. **Never type your dice rolls into a website.** Not even a good one. If a page is open in your browser, anything else on that computer can potentially read it.
 {: .prompt-danger }
