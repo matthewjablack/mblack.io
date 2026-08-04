@@ -174,7 +174,7 @@ Your device now shows you 24 words. **Those words are your wallet.**
 - **Write the words down** on paper or stamped metal. Store them somewhere safe and dry.
 - **Do not** photograph them. Phone photos sync to the cloud.
 - **Do not** type them into a computer, a password manager, or a notes app.
-- **Destroy the paper with your dice rolls on it** once you've confirmed the words work. The rolls are just as dangerous as the words. Anyone with them can recreate your wallet.
+- **Keep the paper with your dice rolls, for now.** You'll want it for one last check in Step 5. Once that check passes, destroy it. The rolls are just as dangerous as the words. Anyone with them can recreate your wallet.
 
 > Save the **words**, not the numbers. The numbers were scaffolding; the words are the wallet.
 {: .prompt-tip }
@@ -183,11 +183,13 @@ Your device now shows you 24 words. **Those words are your wallet.**
 
 Do not skip this.
 
-Wipe the device and restore it from the words you wrote down. Check that it shows the same first receiving address as before.
+First, check the conversion. Enter your dice rolls into a *second* tool that works the same way (any of the ones listed in "What you need") and confirm it shows the exact same words. This is the check that catches a broken or dishonest device, and it's the reason you kept the rolls. Restoring the words alone can never catch that, because it only proves the words make *a* wallet, not that your dice made those words.
+
+Then, test the backup. Wipe the device and restore it from the words you wrote down. Check that it shows the same first receiving address as before.
 
 A backup you have never tested is not a backup. Find out now, with an empty wallet, rather than in five years with your savings in it.
 
-Once it restores correctly, send a small amount first. Confirm it arrives. Then move the rest.
+Once both checks pass: destroy the rolls, send a small amount first, confirm it arrives, then move the rest.
 
 ## 🚫 Five things that will ruin this
 

@@ -518,7 +518,7 @@ And the trap that will make you think you've been hacked when you haven't:
 > If your cross-check disagrees, suspect your **typing** before you suspect your hardware. Ninety-nine times out of a hundred it's a space, a line break, or `Raw` left selected in iancoleman's Mnemonic Length dropdown, not a compromised device. Re-enter the rolls as one unbroken digit run in both tools before concluding anything.
 {: .prompt-warning }
 
-One more sanity check that costs nothing: before you send real money, restore the seed into a watch-only wallet on a second machine and confirm it derives the same first address. A backup you have never tested is not a backup.
+One more sanity check that costs nothing: before you send real money, restore the seed into a watch-only wallet on a second machine and confirm it derives the same first address, making sure both sides use the same derivation path and script type (`m/84'/0'/0'/0/0` native SegWit unless you chose otherwise) and the same passphrase. Two wallets defaulting to different script types will show different addresses for the same valid seed. A backup you have never tested is not a backup.
 
 ## 🚫 What not to do
 
