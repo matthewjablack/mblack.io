@@ -6,7 +6,7 @@ description: >-
   silently gives you a different wallet.
 date: 2026-08-03
 categories: [Bitcoin, Security]
-tags: [Coldcard, Entropy, Hardware Wallets, BIP39]
+tags: [Entropy, Hardware Wallets, BIP39]
 mermaid: true
 ---
 
@@ -209,9 +209,9 @@ html[data-mode=dark] .dice-calc{--dc-bg:#1e1f22;--dc-fg:#e6e6e6;--dc-mut:#9aa0a6
 
 Switch to **Raw entropy** and the numbers collapse. That's not a different tool. It's a different *mode*, and knowing which one you're in is the only genuinely subtle thing on this page.
 
-### Both tools hash, and both give the same words
+### The standard construction, and why the tools agree
 
-Coldcard accumulates your rolls as an ASCII string and hashes it. From its own verification script:
+The construction used by Coldcard, SeedSigner and Keystone alike: accumulate your rolls as an ASCII string and hash them. From Coinkite's public-domain verification script, which is plain Python and needs no hardware at all:
 
 ```python
 r = input().strip()
@@ -231,9 +231,9 @@ if (mnemonicLength != "raw") {
 ```
 {: file="src/js/index.js (iancoleman/bip39)" }
 
-Same hash, same truncation. I checked this rather than assuming it. Feeding identical rolls to both implementations produces **byte-identical mnemonics** for 12 and 24 words, including degenerate inputs like fifty 1s and a hundred 6s.
+Same hash, same truncation. I checked this rather than assuming it. Feeding identical rolls to both implementations produces **byte-identical mnemonics** for 12 and 24 words, including degenerate inputs like fifty 1s and a hundred 6s. I also ran SeedSigner's own published 99-roll test vector through `rolls.py` and got SeedSigner's mnemonic back word for word.
 
-> If a guide tells you Coldcard and iancoleman produce different seeds from the same dice, it's wrong. In word-count mode they are the same algorithm.
+> If a guide tells you these tools produce different seeds from the same dice, it's wrong. Coldcard, SeedSigner, Keystone and iancoleman (in word-count mode) are the same algorithm, and any of them can check any other.
 {: .prompt-info }
 
 So the roll count is simply:
@@ -324,13 +324,15 @@ Twenty dice thrown five times gets you to 100 quickly. One die rolled 100 times 
 
 Three workable options, in the order I'd reach for them.
 
-**1. A Coldcard you already own.** The dice path was never affected by this bug. It never called the broken RNG. `New Seed Words > Advanced > 12 Word Dice Roll` (or `24 Word Dice Roll`), then press 1–6 as you roll. The device shows you the words. If you don't want to keep using that device, write the words down, wipe it, and import them into a different signer. It still works fine as a dice-to-BIP39 calculator.
+**1. A dedicated signer with a verifiable dice mode.** A [SeedSigner](https://seedsigner.com/) is the cleanest option: dice are its *only* entropy source, it has no persistent storage so it forgets everything at power-off, its builds have been reproducible since v0.7.0, and it's ~$50 of parts. `Tools > New Seed (dice icon) > 24 words (99 rolls)`. A Keystone works too and [publishes its own verification guide](https://blog.keyst.one/how-to-verify-the-recovery-phrase-created-by-dice-rolling-af01c16b765e). Both use exactly the construction above, so everything in the verify section applies to them unchanged.
 
-Note the distinction: the pure **Dice Roll** mode derives the seed *only* from your rolls, which is what makes it reproducible. **Add Dice Rolls** mixes your dice into device entropy: safe, but you cannot independently verify the result, because half the input came from a chip.
+**2. An offline copy of iancoleman's BIP39 tool.** Open [iancoleman.io/bip39](https://iancoleman.io/bip39/), File → Save As, move the file to an air-gapped machine, open it there. Or download the [signed GitHub release](https://github.com/iancoleman/bip39/releases/latest) and verify it first. Use the Entropy field, set the type to dice, and set **Mnemonic Length** to 12 or 24, not `Raw`. In that mode it matches the signers above exactly, and 50/100 rolls is the right target. Ignore the weak-entropy warning at 50 rolls; as covered above, it's measuring raw-mode yield rather than what your dice actually carry.
 
-**2. An offline copy of iancoleman's BIP39 tool.** Open [iancoleman.io/bip39](https://iancoleman.io/bip39/), File → Save As, move the file to an air-gapped machine, open it there. Or download the [signed GitHub release](https://github.com/iancoleman/bip39/releases/latest) and verify it first. Use the Entropy field, set the type to dice, and set **Mnemonic Length** to 12 or 24, not `Raw`. In that mode it matches Coldcard exactly, and 50/100 rolls is the right target. Ignore the weak-entropy warning at 50 rolls; as covered above, it's measuring raw-mode yield rather than what your dice actually carry.
+**3. A Coldcard you already own.** If you have one and you're done with the brand, it is still a perfectly good dice-to-words calculator, because the dice path was never affected by this bug: it never called the broken RNG. `New Seed Words > Advanced > 12 Word Dice Roll` (or `24 Word Dice Roll`), press 1–6 as you roll, write down the words, wipe the device, and import the words into whatever you're using instead.
 
-**3. Another signer with a dice mode.** SeedSigner and Keystone use exactly the same construction as Coldcard, so 50/100 rolls applies and all three cross-verify against each other. **Krux does not**: it joins your rolls with dashes before hashing, so identical dice give a different seed. BitBox02 and Jade use a different approach entirely, a printed diceware table where you look up each word by hand.
+Note a distinction that applies on any device offering both: a pure **dice roll** mode derives the seed *only* from your rolls, which is what makes it reproducible. An **add dice to device entropy** mode mixes your rolls into the chip's randomness: safe, but you cannot independently verify the result, because half the input came from a chip.
+
+**What about Krux, BitBox02, Jade?** **Krux does not match the tools above**: it joins your rolls with dashes before hashing, so identical dice give a different seed. BitBox02 and Jade use a different approach entirely, a printed diceware table where you look up each word by hand.
 
 > Trezor and Ledger have no dice input at all, and that does **not** rule you out. Generate the words on something else and import them. See [How to Use Dice With a Trezor, a Ledger, or Any Other Wallet]({% post_url 2026-08-03-dice-for-a-trezor-ledger-or-any-wallet %}) for the per-tool comparison and the import steps.
 {: .prompt-info }
@@ -344,7 +346,7 @@ You'll notice this post doesn't ship a "type your rolls here" widget. That's del
 
 This is the part that makes dice worth the effort, and almost nobody does it.
 
-Coldcard's construction is `SHA256` over your rolls as an ASCII string. That means you can recompute it yourself. The published test vector uses `123456`:
+The construction is `SHA256` over your rolls as an ASCII string, whichever of the matching tools produced your words. That means you can recompute it yourself. The published test vector uses `123456`:
 
 ```console
 $ echo -n 123456 | sha256sum
@@ -364,7 +366,7 @@ Here's that exact computation running live, on the fixed published vector, with 
 
 <div class="dice-calc dc-tv" id="dice-tv">
   <div class="dc-row">
-    <label class="dc-label">Coldcard test vector</label>
+    <label class="dc-label">Published test vector</label>
     <button type="button" class="dc-btn is-on" id="tv-run">Run SHA-256</button>
   </div>
   <p class="dc-hash" id="tv-out">Input: <code>"123456"</code>. Press Run.</p>
@@ -400,7 +402,7 @@ Here's that exact computation running live, on the fixed published vector, with 
 })();
 </script>
 
-For the full check including the words, Coldcard publishes two scripts. Run them on an offline machine. [Tails](https://tails.net/) with no network and no hard drive is ideal:
+For the full check including the words, Coinkite publishes two public-domain scripts. They are plain Python with no dependencies and no hardware involved, so they verify a seed from any of the matching tools, not just a Coldcard. Run them on an offline machine. [Tails](https://tails.net/) with no network and no hard drive is ideal:
 
 ```console
 $ echo 123456 | python3 rolls.py
@@ -412,7 +414,7 @@ $ echo 123456 | python3 rolls12.py
 ```
 {: file="rolls12.py (12 words)" }
 
-Grab them from [coldcard.com/docs/rolls.py](https://coldcard.com/docs/rolls.py) and [rolls12.py](https://coldcard.com/docs/rolls12.py). Feed in your real rolls, and confirm the words match what the device displayed. If they don't, stop and figure out why.
+Grab them from [coldcard.com/docs/rolls.py](https://coldcard.com/docs/rolls.py) and [rolls12.py](https://coldcard.com/docs/rolls12.py). If you'd rather use a script from a different vendor, SeedSigner ships an equivalent CLI in its repo, [`tools/mnemonic.py`](https://github.com/SeedSigner/seedsigner/blob/dev/docs/dice_verification.md), run as `python3 mnemonic.py dice <your rolls>`. Feed in your real rolls, and confirm the words match what your device displayed. If they don't, stop and figure out why.
 
 > **Never run your real dice rolls through a computer you use for anything else.** That defeats the entire exercise. Offline machine, no network, no persistent storage.
 {: .prompt-danger }

@@ -5,7 +5,7 @@ description: >-
   correctly, and you have a Bitcoin wallet nobody can guess. Here's exactly how.
 date: 2026-08-03
 categories: [Bitcoin, Security]
-tags: [Hardware Wallets, Beginners, Coldcard]
+tags: [Hardware Wallets, Beginners]
 ---
 
 *A bug in a popular hardware wallet just cost people a lot of money because the wallet picked bad random numbers. You can sidestep that whole problem by picking the numbers yourself, with dice. It takes about fifteen minutes and costs about ten dollars. This guide assumes you know nothing.*
@@ -27,7 +27,7 @@ Dice fix this completely. When you roll dice, **you** make the random number. Th
 
 - **One or more six-sided dice.** Casino dice (the sharp-edged translucent ones) are about $10 for a set and are made to be fair. A cheap board-game die is *probably* fine but is slightly weighted by its scooped-out dots. If you're securing real money, buy the good ones.
 - **Pen and paper.** Not your phone. Not a notes app.
-- **Something that turns dice into words.** Coldcard, SeedSigner and Keystone all do this on the device. So does an offline copy of a tool called iancoleman's BIP39 page. It does **not** have to be the wallet you plan to keep your Bitcoin in (see below).
+- **Something that turns dice into words.** SeedSigner and Keystone both do this on the device, and so does an offline copy of a tool called iancoleman's BIP39 page. A Coldcard can too, if you already have one. It does **not** have to be the wallet you plan to keep your Bitcoin in (see below).
 - **A hard, flat surface**, ideally with something to bounce the dice off.
 
 ## 🎯 Step 1: Roll 100 times
@@ -157,11 +157,9 @@ One long line of digits. That's it.
 
 ## 📲 Step 3: Type them into your wallet
 
-On a Coldcard: **New Seed Words → Advanced → 24 Word Dice Roll**, then press 1–6 as you read your numbers.
+Look for "dice" in your device's menu when creating a new seed. On a SeedSigner: **Tools → New Seed (the dice icon) → 24 words (99 rolls)**. Keystone has the same option when you create a wallet. If you're using a Coldcard you already own: **New Seed Words → Advanced → 24 Word Dice Roll**. In each case you just press the numbers as you read them off your paper.
 
-Other wallets put it in a similar place. Look for "dice" when creating a new seed.
-
-Type all 100. The device will then show you your seed words.
+Type them all in. Some devices ask for exactly 99 rolls; use your first 99 and ignore the spare, it makes no difference. The device will then show you your seed words.
 
 > **What if my wallet has no dice option?** Trezor and Ledger don't have one, and it doesn't matter. Generate the words on something that does, write them down, and then type those words into your Trezor or Ledger using its normal "restore from recovery phrase" option. The words work in any wallet. Full instructions: [How to Use Dice With a Trezor, a Ledger, or Any Other Wallet]({% post_url 2026-08-03-dice-for-a-trezor-ledger-or-any-wallet %}).
 {: .prompt-info }
