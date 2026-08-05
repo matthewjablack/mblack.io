@@ -164,8 +164,9 @@ html[data-mode=dark] .dice-calc{--dc-bg:#1e1f22;--dc-fg:#e6e6e6;--dc-mut:#9aa0a6
   var FAIR = 1 / 6;
   var state = { rolls: 100, bias: FAIR, tool: 'hashed', words: 12 };
 
-  // Min-entropy of one roll: -log2(probability of the most likely face).
-  // Assumes the attacker knows exactly how the die is loaded.
+  /* Min-entropy of one roll: -log2(probability of the most likely face).
+     Assumes the attacker knows exactly how the die is loaded.
+     Block comments only: compress_html joins these lines in production. */
   function minEntropy(p) { return -Math.log(p) / Math.log(2); }
 
   function render() {
@@ -215,8 +216,8 @@ html[data-mode=dark] .dice-calc{--dc-bg:#1e1f22;--dc-fg:#e6e6e6;--dc-mut:#9aa0a6
 
   box.addEventListener('input', function (e) {
     if (e.target.id === 'dc-rolls') state.rolls = parseInt(e.target.value, 10);
-    // Slider is tenths of a percent; its floor sits just under 1/6 so the
-    // left end clamps to exactly fair rather than 16.6%.
+    /* Tenths of a percent; the floor sits just under 1/6 so the left end
+       clamps to exactly fair rather than 16.6%. */
     else if (e.target.id === 'dc-bias') state.bias = Math.max(FAIR, parseInt(e.target.value, 10) / 1000);
     else return;
     render();
