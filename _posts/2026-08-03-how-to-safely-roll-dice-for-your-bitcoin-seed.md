@@ -611,7 +611,7 @@ Now verification is just reading. The 23 words on the screen either match the 23
 
 Be precise about the limit, though. This needs no *extra* machine, not no machine:
 
-> **Can you get the final word without a computer at all?** Practically, no. Something has to run `SHA256`. Ken Shirriff [measured 16 minutes 45 seconds per round doing it by hand](http://www.righto.com/2014/09/mining-bitcoin-with-pencil-and-paper.html), and one hash is 64 rounds, so call it 18 hours of error-free 32-bit arithmetic with no way to detect a slip. No lookup table can replace it either, since the checksum depends on all 256 entropy bits.
+> **Can you get the final word without a computer at all?** Practically, no. Something has to run `SHA256`. Ken Shirriff [measured 16 minutes 45 seconds per round doing it by hand](https://www.righto.com/2014/09/mining-bitcoin-with-pencil-and-paper.html), and one hash is 64 rounds, so call it 18 hours of error-free 32-bit arithmetic with no way to detect a slip. No lookup table can replace it either, since the checksum depends on all 256 entropy bits.
 {: .prompt-info }
 
 That sounds like a defeat and isn't. **The thing computing your final word has to see the other 23 words anyway, so it must be something you were already going to trust with the seed: your hardware wallet.** You are not adding a party. Compare that to hashing your rolls, where a device computes the *entire seed* and checking its work demands a *second, independent* machine. One device computing one word, everything else on paper, is a categorically smaller ask.
