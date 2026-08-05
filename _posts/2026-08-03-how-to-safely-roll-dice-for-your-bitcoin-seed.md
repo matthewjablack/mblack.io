@@ -423,6 +423,8 @@ Grab them from [coldcard.com/docs/rolls.py](https://coldcard.com/docs/rolls.py) 
 > **Never run your real dice rolls through a computer you use for anything else.** That defeats the entire exercise. Offline machine, no network, no persistent storage.
 {: .prompt-danger }
 
+**What this proves, and what it doesn't.** Matching words prove your rolls produced that seed: the arithmetic was honest and the chip's RNG never entered the result. It does not prove the device didn't also retain or transmit the seed. Nothing computed from the outside can prove that. Which is why the strongest setups either use a signer with no persistent storage, or compute the seed offline and treat the hardware purely as an importer.
+
 ### Read the code before you run it
 
 You should not run a script that generates your seed without reading it, and you shouldn't have to download it to do that. Each file is ~14 KB, but roughly 170 of its 223 lines are just the BIP-39 wordlist. Here is everything else:

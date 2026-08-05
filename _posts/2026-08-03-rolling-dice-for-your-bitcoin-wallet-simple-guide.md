@@ -165,6 +165,9 @@ Look for "dice" in your device's menu when creating a new seed. On a SeedSigner:
 
 Type them all in. Some devices ask for exactly 99 rolls; use your first 99 and ignore the spare, it makes no difference. The device will then show you your seed words.
 
+> **If your device offers two dice options, pick the pure one.** Some wallets can build the seed *only* from your rolls, and can also *add* your rolls to the randomness the chip generated. Choose the first. Only a pure dice mode can be checked in Step 5, because only its result is something you can recompute yourself. Mixing isn't unsafe, but you lose any way to prove your dice were used at all.
+{: .prompt-warning }
+
 > **What if my wallet has no dice option?** Trezor and Ledger don't have one, and it doesn't matter. Generate the words on something that does, write them down, and then type those words into your Trezor or Ledger using its normal "restore from recovery phrase" option. The words work in any wallet. Full instructions: [How to Use Dice With a Trezor, a Ledger, or Any Other Wallet]({% post_url 2026-08-03-dice-for-a-trezor-ledger-or-any-wallet %}).
 {: .prompt-info }
 
@@ -187,9 +190,18 @@ Your device now shows you 24 words. **Those words are your wallet.**
 
 Do not skip this.
 
-First, check the conversion. Enter your dice rolls into a *second* tool that works the same way (any of the ones listed in "What you need") and confirm it shows the exact same words. This is the check that catches a broken or dishonest device, and it's the reason you kept the rolls. Restoring the words alone can never catch that, because it only proves the words make *a* wallet, not that your dice made those words.
+**First: did the device actually use your dice?** This is the check almost nobody does, and it's the whole reason you kept the paper with your rolls.
 
-Then, test the backup. Wipe the device and restore it from the words you wrote down. Check that it shows the same first receiving address as before.
+Enter the same rolls into a *second* tool and confirm you get the exact same words. If you generated on a SeedSigner or a Keystone, use an offline copy of the iancoleman page. If you generated on the iancoleman page, use a SeedSigner. Every word has to match, in order.
+
+If they match, your dice produced those words and the device did nothing but the arithmetic it promised. If they don't match, stop. Your device did not use your rolls the way it claims, and you should not put money in that wallet.
+
+Restoring the words can never tell you this. It only proves the words make *a* wallet, not that *your dice* made those words.
+
+> Comfortable with a terminal? Coinkite publishes a public-domain Python script that does the same conversion with no hardware involved. On an offline machine: `echo YOURROLLS | python3 rolls.py`. The script, the maths, and what this check can and can't prove are all in the [technical version]({% post_url 2026-08-03-how-to-safely-roll-dice-for-your-bitcoin-seed %}#-how-to-verify).
+{: .prompt-tip }
+
+**Then: test the backup.** Wipe the device and restore it from the words you wrote down. Check that it shows the same first receiving address as before.
 
 A backup you have never tested is not a backup. Find out now, with an empty wallet, rather than in five years with your savings in it.
 
