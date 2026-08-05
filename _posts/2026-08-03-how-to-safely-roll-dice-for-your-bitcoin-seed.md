@@ -603,6 +603,21 @@ Here are the four ways out, best first.
 
 Roll dice, look up each word in a printed BIP-39 table, write down 23 words. Enter those into your wallet and let it compute only the 24th. This is [option 4 above](#-where-to-enter-them).
 
+**Concretely, using BitBox's published method.** Print [the procedure](https://bitbox.swiss/bitbox02/BitBox_Diceware_HowTo.pdf) and [the lookup table](https://bitbox.swiss/bitbox02/BitBox_Diceware_LookupTable.pdf). Both are free PDFs, CC BY-SA licensed, and you do not need to own a BitBox to use them. Then, per word:
+
+1. **Roll five dice. Reroll any die showing 5 or 6** until it shows 1 to 4.
+2. **Flip a coin** (or roll a sixth die and read it the same way).
+3. **Look up the word.** The printed table tells you which roll picks the page, which pick the row, and which pick the column. Write the word on paper.
+4. **Repeat 23 times.** Do not pick the 24th.
+5. Enter the 23 words into your wallet, which offers the valid 24th words. Pick one, write it down.
+
+The reroll rule in step 1 is the whole trick. Discarding 5s and 6s leaves each die with four equally likely faces, which is exactly 2 bits. Five dice give 10 bits, the coin gives the 11th, and `2^11 = 2048` is precisely the size of the BIP-39 word list. No modulo, no rejection at the end, no wasted entropy: **one throw, one word, exactly.**
+
+Also note what that reroll rule does to the bias question from [earlier](#how-fair-do-the-dice-need-to-be). You are only ever using a 4-way outcome, so any bias on the 5 and 6 faces is discarded outright rather than folded into your seed.
+
+> Budget for it honestly. Rerolls mean about 1.5 throws per die, so 23 words costs roughly **172 die rolls and 23 coin flips**, against 100 rolls for the hash method. You are buying verifiability with your evening.
+{: .prompt-info }
+
 Now verification is just reading. The 23 words on the screen either match the 23 on your paper or they don't. No hashing, no second tool, no script. **You chose the entropy, so there is no claim left for the device to lie about.** Three properties make this stronger than it first looks:
 
 - **The device's influence is nil.** A 24-word seed is 23 freely chosen words (253 bits) plus a final word carrying 3 entropy bits and 8 checksum bits. That leaves exactly **8 valid final words** out of 2048, and in BitBox's flow the device offers them and *you* pick. For 12 words it's 11 free words and 128 valid finals.
