@@ -297,9 +297,9 @@ Two footnotes while we're here. Coldcard's docs say 99 rolls for 256 bits, but `
 
 ### How fair do the dice need to be?
 
-Much less fair than you would think. [Alex Waltz](https://x.com/raw_avocado) pushed back on the "buy precision dice" advice further down this page, and he's right: entropy loss from bias is logarithmic, so it takes an absurdly loaded die to matter. The calculator above now has a bias control so you can check that yourself.
+Much less fair than you would think. Alex Waltz pushed back on the "buy precision dice" advice further down this page, and he's right: entropy loss from bias is logarithmic, so it takes an absurdly loaded die to matter. He has [been making this argument since 2022](https://x.com/raw_avocado/status/1508196740314374153), from the first page of Shannon's *A Mathematical Theory of Communication*, with worked examples for coins as well as dice. The calculator above now has a bias control so you can check it yourself.
 
-The number it moves is **min-entropy**: `-log2(p)`, where `p` is the probability of the die's most likely face. That's the measure keying material is judged by, and it's deliberately pessimistic. It assumes an attacker who knows exactly how your die is loaded and starts guessing with the likeliest sequence. Shannon entropy would flatter the result. At a face coming up 25% of the time, Shannon still reads 2.553 bits and min-entropy reads 2.000.
+The number it moves is **min-entropy**: `-log2(p)`, where `p` is the probability of the die's most likely face. That's the measure keying material is judged by, and it's deliberately pessimistic. It assumes an attacker who knows exactly how your die is loaded and starts guessing with the likeliest sequence. Shannon entropy would flatter the result. At a face coming up 25% of the time, Shannon still reads 2.553 bits and min-entropy reads 2.000. Worth noting that Waltz's thread argues from Shannon, the classic measure; the numbers below use the stricter one and land in the same place. His case is if anything stronger than he made it.
 
 So, some biases and what they actually cost:
 
@@ -321,6 +321,10 @@ There is an honest flip side, and it's the one thing the "cheap dice are fine" a
 Which points at the actual fix. If you're worried about your dice, **roll fifteen more**. That costs two minutes and covers far more bias than precision dice would have removed. Buying better dice to protect a 24-word seed, and then rolling exactly 100, solves the smaller problem.
 
 One caveat on the model: min-entropy depends only on the single likeliest face, so treating one face as heavy and the other five as equal is the worst case for any given level of bias. Real dice spread their bias across opposite-face pairs, which is gentler than the table above.
+
+**Don't try to fix a biased die yourself.** The classic trick, which [opens that same thread](https://x.com/raw_avocado/status/1508194859970174988), is von Neumann debiasing: roll in pairs, throw away ties, take the order of the two as your bit. It works, and you do not need it. Hashing already does the extraction, which is the entire reason a biased die costs you a few rolls instead of your seed.
+
+More importantly, don't. Every tool in the verify section hashes the literal digits you typed. Debiased rolls are [a different string](#-the-formatting-trap), so no second implementation will reproduce your words, and you have destroyed the one check that makes dice worth doing.
 
 ## 🚨 The formatting trap
 
