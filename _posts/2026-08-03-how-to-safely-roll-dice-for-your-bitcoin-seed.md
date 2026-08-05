@@ -97,23 +97,24 @@ Drag this:
     <output class="dc-count" id="dc-bias-count">16.7% (fair)</output>
   </div>
   <input type="range" id="dc-bias" min="166" max="500" value="166" step="1" class="dc-slider">
+  <p class="dc-note dc-hint">How often the die's favourite face lands. A fair die is 16.7%, one in six. Drag right to pretend your die is loaded, and watch how many more rolls it takes to get back to a full seed.</p>
   <div class="dc-toggles">
     <div class="dc-group" role="group" aria-label="Mode">
       <button type="button" class="dc-btn is-on" data-tool="hashed">Hashed (default)</button>
       <button type="button" class="dc-btn" data-tool="raw">Raw entropy</button>
     </div>
     <div class="dc-group" role="group" aria-label="Seed length">
-      <button type="button" class="dc-btn is-on" data-words="12">12 words</button>
-      <button type="button" class="dc-btn" data-words="24">24 words</button>
+      <button type="button" class="dc-btn" data-words="12">12 words</button>
+      <button type="button" class="dc-btn is-on" data-words="24">24 words</button>
     </div>
   </div>
   <div class="dc-bar"><span class="dc-fill" id="dc-fill"></span></div>
   <div class="dc-stats">
     <div><span class="dc-k">Entropy in</span><span class="dc-v" id="dc-raw">258.5 bits</span></div>
-    <div><span class="dc-k">Actually used</span><span class="dc-v" id="dc-used">128 bits</span></div>
+    <div><span class="dc-k">Actually used</span><span class="dc-v" id="dc-used">256 bits</span></div>
     <div><span class="dc-k">Rate</span><span class="dc-v" id="dc-rate">2.585 bits/roll</span></div>
   </div>
-  <p class="dc-verdict" id="dc-verdict">Saturated.</p>
+  <p class="dc-verdict" id="dc-verdict">Saturated at exactly 100 rolls.</p>
   <p class="dc-note">Takes a roll <em>count</em> only. Never type actual dice values into a web page, including this one.</p>
 </div>
 
@@ -141,6 +142,7 @@ html[data-mode=dark] .dice-calc{--dc-bg:#1e1f22;--dc-fg:#e6e6e6;--dc-mut:#9aa0a6
 .dc-v{font-size:1.05rem;font-weight:600;font-variant-numeric:tabular-nums}
 .dc-verdict{margin:0 0 .5rem;font-weight:600}
 .dc-note{margin:0;font-size:.8rem;color:var(--dc-mut)}
+.dc-hint{margin:-.6rem 0 1rem;line-height:1.5}
 .dc-tv{margin-top:.75rem}
 .dc-det{padding:0}
 .dc-det>summary{cursor:pointer;padding:.8rem 1rem;font-weight:600;font-size:.92rem;list-style:none;color:var(--dc-acc)}
@@ -162,7 +164,7 @@ html[data-mode=dark] .dice-calc{--dc-bg:#1e1f22;--dc-fg:#e6e6e6;--dc-mut:#9aa0a6
 
   var RATE = { raw: (4 * 2 + 2 * 1) / 6 };
   var FAIR = 1 / 6;
-  var state = { rolls: 100, bias: FAIR, tool: 'hashed', words: 12 };
+  var state = { rolls: 100, bias: FAIR, tool: 'hashed', words: 24 };
 
   /* Min-entropy of one roll: -log2(probability of the most likely face).
      Assumes the attacker knows exactly how the die is loaded.
