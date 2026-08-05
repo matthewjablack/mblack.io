@@ -82,6 +82,8 @@ So before you use the two device check, know which family your tools are in:
 
 I verified the top two rows rather than taking anyone's word for it. Coldcard's `rolls.py` reproduces SeedSigner's own published test vector exactly, and the Krux divergence above is real output, not a hypothetical.[^verified] The BitBox and Jade rows are from vendor documentation.[^diceware]
 
+**"Not comparable" means different, not worse.** BitBox02 and Jade skip the two device check because they never need it: you pick the words off a printed table yourself, so the device has nothing to be checked on except one checksum word. That is arguably the strongest of these designs, since it's the only one where verification needs no second tool and no computer. I make the full case in [Verifying without a computer]({% post_url 2026-08-03-how-to-safely-roll-dice-for-your-bitcoin-seed %}#-verifying-without-a-computer), including how to use BitBox's free lookup table with a wallet you already own.
+
 > **Foundation Passport is genuinely unclear.** Its own community guide says there is no way to add your own entropy yet, while several reviews describe it mixing dice into device randomness. Those can't both be true. If your Passport does mix dice with the chip's output, that is perfectly safe but **not reproducible**, so the two device check is impossible by design. Ask Foundation before relying on either behaviour.
 {: .prompt-warning }
 

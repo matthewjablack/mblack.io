@@ -395,7 +395,11 @@ Three workable options, in the order I'd reach for them.
 
 Note a distinction that applies on any device offering both: a pure **dice roll** mode derives the seed *only* from your rolls, which is what makes it reproducible. An **add dice to device entropy** mode mixes your rolls into the chip's randomness: safe, but you cannot independently verify the result, because half the input came from a chip.
 
-**What about Krux, BitBox02, Jade?** **Krux does not match the tools above**: it joins your rolls with dashes before hashing, so identical dice give a different seed. BitBox02 and Jade use a different approach entirely, a printed diceware table where you look up each word by hand.
+**4. A printed word table, with no device in the entropy path at all.** Instead of handing your rolls to a device and letting it hash them, you roll, look up each word yourself in a printed BIP-39 table, and write down 23 words. The device's only job is computing the 24th checksum word. This is what BitBox02 and Jade do, and it is not a lesser variant of the options above: it is the only one where nothing you cannot see ever touches your entropy. [Why that matters, and how you verify it](#-verifying-without-a-computer), below.
+
+The unlock most people miss: **BitBox publishes the lookup table as a free PDF and you do not need to own a BitBox to use it.** Print [the table](https://bitbox.swiss/bitbox02/BitBox_Diceware_LookupTable.pdf) and [the procedure](https://bitbox.swiss/bitbox02/BitBox_Diceware_HowTo.pdf), then pair them with any wallet that can compute a final word: SeedSigner (`Seeds > + Create a seed > Calc 12th/24th word`), a Coldcard Mk4 (enter 23 words on import and it offers the valid finals), Jade, or BlueWallet (`Settings > Tools > Seed final word`). Trezor cannot do this; [the request has been open since 2020](https://github.com/trezor/trezor-firmware/issues/1381).
+
+**What about Krux?** **Krux does not match the tools above**: it joins your rolls with dashes before hashing, so identical dice give a different seed.
 
 > Trezor and Ledger have no dice input at all, and that does **not** rule you out. Generate the words on something else and import them. See [How to Use Dice With a Trezor, a Ledger, or Any Other Wallet]({% post_url 2026-08-03-dice-for-a-trezor-ledger-or-any-wallet %}) for the per-tool comparison and the import steps.
 {: .prompt-info }
@@ -584,6 +588,58 @@ And the trap that will make you think you've been hacked when you haven't:
 {: .prompt-warning }
 
 One more sanity check that costs nothing: before you send real money, restore the seed into a watch-only wallet on a second machine and confirm it derives the same first address, making sure both sides use the same derivation path and script type (`m/84'/0'/0'/0/0` native SegWit unless you chose otherwise) and the same passphrase. Two wallets defaulting to different script types will show different addresses for the same valid seed. A backup you have never tested is not a backup.
+
+## 🔍 Verifying without a computer
+
+Everything above has a problem, and [@4moonsettler](https://x.com/4moonsettler) put it more bluntly than I had:
+
+> that is super easy to entropy starve in a black box device. sure people were technically able to verify in a cumbersome and insecure way if they only used the deterministic seed from dice. the whole idea behind the COLDCARD brand was to never ever put your seed into a PC of any kind.
+
+He's right, and it's worth stating plainly. If your device hashes your rolls, the only way to prove it used them is to recompute the hash somewhere else. Somewhere else is a computer. So the integrity check requires doing precisely the thing the device's own marketing tells you never to do. That is a real tension, not a nitpick, and this post spent 3,000 words telling you to verify without once admitting it.
+
+Here are the four ways out, best first.
+
+### 1. Choose the words yourself, so there is nothing to recompute
+
+Roll dice, look up each word in a printed BIP-39 table, write down 23 words. Enter those into your wallet and let it compute only the 24th. This is [option 4 above](#-where-to-enter-them).
+
+Now verification is just reading. The 23 words on the screen either match the 23 on your paper or they don't. No hashing, no second tool, no script. **You chose the entropy, so there is no claim left for the device to lie about.** Three properties make this stronger than it first looks:
+
+- **The device's influence is nil.** A 24-word seed is 23 freely chosen words (253 bits) plus a final word carrying 3 entropy bits and 8 checksum bits. That leaves exactly **8 valid final words** out of 2048, and in BitBox's flow the device offers them and *you* pick. For 12 words it's 11 free words and 128 valid finals.
+- **A wrong final word is self-detecting.** BIP-39 requires the checksum to validate and every mainstream wallet enforces it. A bad final word fails on import. You don't have to trust it; the standard checks it for you.
+- **Lookup mistakes are harmless.** Any 23 words are as good as any other 23. There is no correct answer to get wrong. Contrast a typo in a roll string fed to `SHA256`, which silently hands you a different wallet.
+
+Be precise about the limit, though. This needs no *extra* machine, not no machine:
+
+> **Can you get the final word without a computer at all?** Practically, no. Something has to run `SHA256`. Ken Shirriff [measured 16 minutes 45 seconds per round doing it by hand](http://www.righto.com/2014/09/mining-bitcoin-with-pencil-and-paper.html), and one hash is 64 rounds, so call it 18 hours of error-free 32-bit arithmetic with no way to detect a slip. No lookup table can replace it either, since the checksum depends on all 256 entropy bits.
+{: .prompt-info }
+
+That sounds like a defeat and isn't. **The thing computing your final word has to see the other 23 words anyway, so it must be something you were already going to trust with the seed: your hardware wallet.** You are not adding a party. Compare that to hashing your rolls, where a device computes the *entire seed* and checking its work demands a *second, independent* machine. One device computing one word, everything else on paper, is a categorically smaller ask.
+
+The costs are real: more rolls, more tedium, and you have to trust the printed table. That last one is a one-time paper-against-paper check against the public BIP-39 word list, not a per-seed risk.
+
+### 2. Two independent hardware signers
+
+Sticking with the hash method, enter the same rolls into two signers from different vendors and compare all 24 words. No PC anywhere. The cost is a second device bought for the purpose, which is a real expense but a cheap one next to the balance it protects.
+
+They have to share the construction. Coldcard, SeedSigner and Keystone agree; **Krux does not**, because it dash-separates before hashing.
+
+### 3. An amnesic offline computer, with the rule everyone skips
+
+Tails, running from RAM, no hard drive. This is genuinely fine and I'd rather you did it than skipped verification.
+
+The rule people miss is on the other end. Everyone wipes the machine *before* the ceremony. Almost nobody wipes it *after*, which is when the seed is actually on it. If you ran an installed Linux rather than something amnesic, your dice rolls went straight into `~/.bash_history` the moment you typed `echo 655152... | python3 rolls.py`, and process memory can reach swap. Wipe it afterwards, or don't use a disk in the first place.
+
+> This is the realistic way a dice seed leaks. Not exotic firmware implants, not TEMPEST. A shell history file on a laptop that went back online a week later.
+{: .prompt-danger }
+
+### 4. Don't verify
+
+Not an option. This is a return to trusting the black box, which is the thing that just cost people 1,367 BTC.
+
+### The residual that no method escapes
+
+Whichever route you take, entropy integrity and *address* integrity are different questions. Confirming the device actually derives the addresses those words describe still wants an independent derivation with a matching account type, derivation path and passphrase, exactly as in [the check above](#-how-to-verify). The table method removes the computer from your entropy. It does not remove it from that.
 
 ## 🚫 What not to do
 
