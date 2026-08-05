@@ -29,7 +29,7 @@ Dice fix this completely. When you roll dice, **you** make the random number. Th
 
 ## 🛒 What you need
 
-- **One or more six-sided dice.** Casino dice (the sharp-edged translucent ones) are about $10 for a set and are made to be fair. A cheap board-game die is *probably* fine but is slightly weighted by its scooped-out dots. If you're securing real money, buy the good ones.
+- **One or more six-sided dice.** Whatever you have in a board game drawer will do. Its scooped-out dots make it very slightly unfair, but you'd need a die that landed on one face 41% of the time before that mattered, and yours doesn't. Casino dice (the sharp-edged translucent ones, about $10 a set) are nicer if you're buying anyway. If you want a free hedge, roll 115 times instead of 100.
 - **Pen and paper.** Not your phone. Not a notes app.
 - **Something that turns dice into words.** SeedSigner and Keystone both do this on the device, and so does an offline copy of a tool called iancoleman's BIP39 page. A Coldcard can too, if you already have one. It does **not** have to be the wallet you plan to keep your Bitcoin in (see below).
 - **A hard, flat surface**, ideally with something to bounce the dice off.

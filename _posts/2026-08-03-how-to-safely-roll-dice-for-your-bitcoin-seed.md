@@ -92,6 +92,11 @@ Drag this:
     <output class="dc-count" id="dc-count">100</output>
   </div>
   <input type="range" id="dc-rolls" min="0" max="200" value="100" step="1" class="dc-slider">
+  <div class="dc-row">
+    <label class="dc-label" for="dc-bias">Most common face</label>
+    <output class="dc-count" id="dc-bias-count">16.7% (fair)</output>
+  </div>
+  <input type="range" id="dc-bias" min="166" max="500" value="166" step="1" class="dc-slider">
   <div class="dc-toggles">
     <div class="dc-group" role="group" aria-label="Mode">
       <button type="button" class="dc-btn is-on" data-tool="hashed">Hashed (default)</button>
@@ -155,11 +160,17 @@ html[data-mode=dark] .dice-calc{--dc-bg:#1e1f22;--dc-fg:#e6e6e6;--dc-mut:#9aa0a6
   var box = el('dice-calc');
   if (!box) return;
 
-  var RATE = { hashed: Math.log(6) / Math.log(2), raw: (4 * 2 + 2 * 1) / 6 };
-  var state = { rolls: 100, tool: 'hashed', words: 12 };
+  var RATE = { raw: (4 * 2 + 2 * 1) / 6 };
+  var FAIR = 1 / 6;
+  var state = { rolls: 100, bias: FAIR, tool: 'hashed', words: 12 };
+
+  // Min-entropy of one roll: -log2(probability of the most likely face).
+  // Assumes the attacker knows exactly how the die is loaded.
+  function minEntropy(p) { return -Math.log(p) / Math.log(2); }
 
   function render() {
-    var rate = RATE[state.tool];
+    var raws = state.tool === 'raw';
+    var rate = raws ? RATE.raw : minEntropy(state.bias);
     var target = state.words === 12 ? 128 : 256;
     var raw = state.rolls * rate;
     var used = Math.min(raw, target);
@@ -167,6 +178,17 @@ html[data-mode=dark] .dice-calc{--dc-bg:#1e1f22;--dc-fg:#e6e6e6;--dc-mut:#9aa0a6
     var pct = Math.min(100, (used / target) * 100);
 
     el('dc-count').textContent = state.rolls;
+
+    var biasEl = el('dc-bias');
+    var facePct = (state.bias * 100).toFixed(1) + '%';
+    el('dc-bias-count').textContent = raws
+      ? 'n/a in raw mode'
+      : state.bias <= FAIR
+        ? facePct + ' (fair)'
+        : facePct + ' (' + (state.bias / FAIR).toFixed(1) + '× fair)';
+    biasEl.disabled = raws;
+    biasEl.style.opacity = raws ? '0.4' : '';
+
     el('dc-raw').textContent = raw.toFixed(1) + ' bits';
     el('dc-used').textContent = used.toFixed(1) + ' bits';
     el('dc-rate').textContent = rate.toFixed(3) + ' bits/roll';
@@ -192,8 +214,11 @@ html[data-mode=dark] .dice-calc{--dc-bg:#1e1f22;--dc-fg:#e6e6e6;--dc-mut:#9aa0a6
   }
 
   box.addEventListener('input', function (e) {
-    if (e.target.id !== 'dc-rolls') return;
-    state.rolls = parseInt(e.target.value, 10);
+    if (e.target.id === 'dc-rolls') state.rolls = parseInt(e.target.value, 10);
+    // Slider is tenths of a percent; its floor sits just under 1/6 so the
+    // left end clamps to exactly fair rather than 16.6%.
+    else if (e.target.id === 'dc-bias') state.bias = Math.max(FAIR, parseInt(e.target.value, 10) / 1000);
+    else return;
     render();
   });
 
@@ -267,6 +292,33 @@ And note the flip side, which the calculator makes obvious: past saturation, **e
 
 Two footnotes while we're here. Coldcard's docs say 99 rolls for 256 bits, but `99 × 2.585 = 255.9`, a hair under. Round to 100. And a 24-word seed is 256 bits of entropy plus an 8-bit checksum (264 ÷ 11 = 24 words); 12 words is 128 + 4 (132 ÷ 11 = 12). The checksum is computed for you. It is not something you roll.
 
+### How fair do the dice need to be?
+
+Much less fair than you would think. [Alex Waltz](https://x.com/raw_avocado) pushed back on the "buy precision dice" advice further down this page, and he's right: entropy loss from bias is logarithmic, so it takes an absurdly loaded die to matter. The calculator above now has a bias control so you can check that yourself.
+
+The number it moves is **min-entropy**: `-log2(p)`, where `p` is the probability of the die's most likely face. That's the measure keying material is judged by, and it's deliberately pessimistic. It assumes an attacker who knows exactly how your die is loaded and starts guessing with the likeliest sequence. Shannon entropy would flatter the result. At a face coming up 25% of the time, Shannon still reads 2.553 bits and min-entropy reads 2.000.
+
+So, some biases and what they actually cost:
+
+| Most common face | vs fair | Bits per roll | 100 rolls |
+|---|---|---|---|
+| 16.7% | fair | 2.585 | 258.5 |
+| 20% | 1.2× | 2.322 | 232.2 |
+| 25% | 1.5× | 2.000 | 200.0 |
+| 40% | 2.4× | 1.322 | 132.2 |
+| 50% | 3× | 1.000 | 100.0 |
+
+Read the 25% row again. A die landing on one face a quarter of the time is visibly, obviously crooked, and 100 rolls of it still buys you 200 bits. Nobody is brute-forcing 200 bits.
+
+> **A die would have to favour one face 41% of the time before 100 rolls stopped clearing 128 bits.** That is a die you would spot in twenty throws. If your dice are not that broken, and they are not, your seed is fine.
+{: .prompt-tip }
+
+There is an honest flip side, and it's the one thing the "cheap dice are fine" argument glosses over. A fair d6 gives exactly `258.5` bits at 100 rolls, which clears 256 with `2.5` bits to spare. That margin is thin enough that *any* real bias puts a 24-word seed a shade under 256. At a 20% face you'd want 111 rolls; at 25%, 128.
+
+Which points at the actual fix. If you're worried about your dice, **roll fifteen more**. That costs two minutes and covers far more bias than precision dice would have removed. Buying better dice to protect a 24-word seed, and then rolling exactly 100, solves the smaller problem.
+
+One caveat on the model: min-entropy depends only on the single likeliest face, so treating one face as heavy and the other five as equal is the worst case for any given level of bias. Real dice spread their bias across opposite-face pairs, which is gentler than the table above.
+
 ## 🚨 The formatting trap
 
 Here is the one that will actually cost someone their coins, and I haven't seen it written down anywhere.
@@ -307,7 +359,7 @@ The rule is boring and absolute:
 
 The math is the easy half. The physical half is where people quietly ruin it.
 
-**Get dice that are actually fair.** Cheap board-game dice have rounded corners and hollowed-out pips, which shifts the center of mass toward the 1. Casino-grade precision dice have flush pips and sharp edges and are machined to a thousandth of an inch. A set costs about $10. You are protecting a seed with it.
+**Whatever dice you have are almost certainly fine.** Cheap board-game dice do have rounded corners and hollowed-out pips, which shifts the center of mass toward the 1, and casino-grade precision dice with flush pips and sharp edges are machined to a thousandth of an inch for about $10. But as [the bias table above](#how-fair-do-the-dice-need-to-be) shows, a die would have to favour one face 41% of the time before 100 rolls stopped clearing 128 bits. Yours doesn't. If you want a hedge that costs nothing, roll fifteen extra rather than waiting on a delivery.
 
 **Roll on a hard flat surface with a wall.** A table with a book at the far end. Dice that tumble and bounce off something randomize far better than dice dropped onto carpet.
 
