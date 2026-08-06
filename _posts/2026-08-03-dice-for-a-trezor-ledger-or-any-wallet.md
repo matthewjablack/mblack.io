@@ -15,6 +15,15 @@ image:
 
 *The most common reaction to the Coldcard entropy bug has been "great, but I own a Trezor and it has no dice mode, so this isn't for me." That is the wrong conclusion, and it's the fault of every dice guide including my own two. Your wallet does not need to support dice.*
 
+> **Correction, 5 August 2026.** This post originally claimed Krux produces a different seed from the same dice, and showed a worked example of it. That was wrong on both counts.
+>
+> Krux stopped dash-separating D6 rolls in **v22.08.0, on 10 August 2022**, specifically for consistency with Coldcard and SeedSigner. My source was [a forum thread from 15 July 2022](https://github.com/selfcustody/krux/discussions/138), fixed under a month later. I quoted the complaint and missed the fix.
+>
+> Worse: I labelled those mnemonic words as real Krux output and wrote that they were "real output, not a hypothetical." They were not. I hashed a dash-joined string myself and never ran Krux. For a post about verifying instead of trusting, that is the exact mistake it warns about, and the footnote I attached only ever covered the Coldcard check.
+>
+> Thanks to [@matijaoe](https://x.com/matijaoe), who cross-checked it on real hardware and told me. The section below is rewritten, and I have [reproduced Krux's own test vector](#krux-check) rather than taking anyone's word for it this time.
+{: .prompt-warning }
+
 ---
 
 ## 🔑 Your wallet does not need a dice mode
@@ -56,31 +65,31 @@ There's popular advice going around, and it is *nearly* right:
 > [@BitPaine](https://x.com/BitPaine), ~7K views
 {: .prompt-info }
 
-The instinct is excellent. Two independent implementations agreeing is exactly the kind of check that would have caught the Coldcard bug. But it only works **if both tools convert dice to entropy the same way**, and they don't all agree.
-
-Here's the same 99 physical dice rolls put through two real implementations:
-
-```text
-rolls: 655152231316521321611331544441236164664431121534415633526456254462245546236542364246312613322234612
-
-Coldcard / SeedSigner:  eyebrow obvious such suggest poet seven breeze blame virtual ...
-Krux:                   skate announce rain myself cross become taxi swap sun ...
-```
-
-Same dice. Different wallets. Neither tool is broken.
-
-The reason is the one this blog already made a fuss about: **separators change the hash**. Coldcard and SeedSigner hash `655152...`; Krux joins your rolls with dashes and hashes `6-5-5-1-5-2...`. One character per roll, completely different seed.[^krux]
-
-So before you use the two device check, know which family your tools are in:
+The instinct is excellent. Two independent implementations agreeing is exactly the kind of check that would have caught the Coldcard bug. And the good news, which I got wrong the first time I published this, is that **the D6 tools do all agree**.
 
 | Tool | How it turns dice into a seed | Matches Coldcard? |
 | :--- | :--- | :---: |
 | **Coldcard**, **SeedSigner**, **Keystone**, iancoleman (word count mode) | `SHA256` over the digits, no separators | **Yes** |
-| **Krux** | `SHA256` over the digits, dash separated | **No** |
+| **Krux** (D6) | `SHA256` over the digits, no separators | **Yes**, since v22.08.0 |
+| **Krux** (D20) | `SHA256` over the rolls, dash separated | Not applicable, no other tool takes D20 |
 | **BitBox02**, **Blockstream Jade** | Printed diceware table: roll 5 dice, look up a word, repeat. Device computes the final checksum word | **Not comparable** |
 | **Trezor**, **Ledger**, **OneKey** | No dice input at all | Import the words instead |
 
-I verified the top two rows rather than taking anyone's word for it. Coldcard's `rolls.py` reproduces SeedSigner's own published test vector exactly, and the Krux divergence above is real output, not a hypothetical.[^verified] The BitBox and Jade rows are from vendor documentation.[^diceware]
+Krux's D20 mode keeps the dashes on purpose, and the reason is neat: without a separator, `1-17` and `11-7` both flatten to `117` and collide. A separator is genuinely required once faces reach double digits. For D6 it isn't, so Krux dropped it.[^krux]
+
+So the two device check works, and the thing most likely to break it is not your tools. It's your typing. Here are the same 99 rolls hashed as written, and then hashed after being written down in tidy space separated groups:
+
+```text
+rolls: 655152231316521321611331544441236164664431121534415633526456254462245546236542364246312613322234612
+
+as typed, no separators:     eyebrow obvious such suggest poet seven breeze blame virtual ...
+same rolls, typed with spaces: fox snake scene riot sister jewel gather alarm lawn remind ...
+```
+
+Same dice. Different wallets. Nothing is broken, and no device did anything wrong. A space is a character, and it goes into the hash like any other.
+
+{: #krux-check }
+I checked this rather than taking anyone's word for it, having already been burned doing the opposite. Coldcard's `rolls.py` reproduces SeedSigner's published test vector exactly.[^verified] For Krux I reproduced the project's own unit test: `test_new_12w_from_d6` asserts the mnemonic `diet glad hat rural panther lawsuit act drop gallery urge where fit`, and hashing 50 D6 rolls of `1` as the bare string `111...1` gives exactly that, while the dash-joined version does not.[^krux] The BitBox and Jade rows are from vendor documentation.[^diceware]
 
 **"Not comparable" means different, not worse.** BitBox02 and Jade skip the two device check because they never need it: you pick the words off a printed table yourself, so the device has nothing to be checked on except one checksum word. That is arguably the strongest of these designs, since it's the only one where verification needs no second tool and no computer. I make the full case in [Verifying without a computer]({% post_url 2026-08-03-how-to-safely-roll-dice-for-your-bitcoin-seed %}#-verifying-without-a-computer), including how to use BitBox's free lookup table with a wallet you already own.
 
@@ -161,7 +170,7 @@ Your wallet never needed to know about the dice.
 
 *New to this? Start with [Rolling Dice for Your Bitcoin Wallet: The Simple Guide]({% post_url 2026-08-03-rolling-dice-for-your-bitcoin-wallet-simple-guide %}). Want the entropy maths, the bug that caused all this, and the source code? [How to Safely Roll Dice for Your Bitcoin Seed]({% post_url 2026-08-03-how-to-safely-roll-dice-for-your-bitcoin-seed %}).*
 
-[^krux]: Confirmed in [krux discussion #138](https://github.com/selfcustody/krux/discussions/138): *"Krux will use the sha256 hash of `1-5-6-3...` whereas ColdCard and SeedSigner will use the sha256 hash of `15634...`"*. Remove the dashes and the seeds match.
+[^krux]: Krux [CHANGELOG v22.08.0](https://github.com/selfcustody/krux/blob/main/CHANGELOG.md), 10 Aug 2022: *"we also introduced a change to how the D6 roll string is built, no longer including '-' between rolls prior to hashing to have consistency with ColdCard and SeedSigner"*, while keeping the separator for D20 to avoid `1-17` and `11-7` colliding. The current source is one line, [`src/krux/pages/new_mnemonic/dice_rolls.py`](https://github.com/selfcustody/krux/blob/main/src/krux/pages/new_mnemonic/dice_rolls.py): `entropy = "".join(self.rolls) if self.num_sides < 10 else "-".join(self.rolls)`. I confirmed the behaviour by reproducing [the project's own D6 test vector](https://github.com/selfcustody/krux/blob/main/tests/pages/new_mnemonic/test_dice_rolls.py). The older [discussion #138](https://github.com/selfcustody/krux/discussions/138) from July 2022 describes the pre-fix behaviour and is what I originally, wrongly, relied on.
 
 [^verified]: The 99 roll vector is SeedSigner's own, from [docs/dice_verification.md](https://github.com/SeedSigner/seedsigner/blob/dev/docs/dice_verification.md). I ran it through Coldcard's [rolls.py](https://coldcard.com/docs/rolls.py) and got SeedSigner's published mnemonic back, word for word. SeedSigner separately documents matching iancoleman and bitcoiner.guide/seed. Keystone [documents the same SHA256 construction](https://blog.keyst.one/how-to-verify-the-recovery-phrase-created-by-dice-rolling-af01c16b765e).
 

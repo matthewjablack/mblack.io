@@ -399,7 +399,7 @@ Note a distinction that applies on any device offering both: a pure **dice roll*
 
 The unlock most people miss: **BitBox publishes the lookup table as a free PDF and you do not need to own a BitBox to use it.** Print [the table](https://bitbox.swiss/bitbox02/BitBox_Diceware_LookupTable.pdf) and [the procedure](https://bitbox.swiss/bitbox02/BitBox_Diceware_HowTo.pdf), then pair them with any wallet that can compute a final word: SeedSigner (`Seeds > + Create a seed > Calc 12th/24th word`), a Coldcard Mk4 (enter 23 words on import and it offers the valid finals), Jade, or BlueWallet (`Settings > Tools > Seed final word`). Trezor cannot do this; [the request has been open since 2020](https://github.com/trezor/trezor-firmware/issues/1381).
 
-**What about Krux?** **Krux does not match the tools above**: it joins your rolls with dashes before hashing, so identical dice give a different seed.
+**What about Krux?** **Krux matches the tools above** for D6. Its D20 mode dash-separates the rolls, deliberately, because `1-17` and `11-7` would otherwise both flatten to `117`. An earlier version of this post said Krux diverged on D6 too. That was wrong: it was fixed in v22.08.0 in August 2022, and I have [corrected it in full]({% post_url 2026-08-03-dice-for-a-trezor-ledger-or-any-wallet %}), including how I checked it this time.
 
 > Trezor and Ledger have no dice input at all, and that does **not** rule you out. Generate the words on something else and import them. See [How to Use Dice With a Trezor, a Ledger, or Any Other Wallet]({% post_url 2026-08-03-dice-for-a-trezor-ledger-or-any-wallet %}) for the per-tool comparison and the import steps.
 {: .prompt-info }
@@ -637,7 +637,7 @@ The costs are real: more rolls, more tedium, and you have to trust the printed t
 
 Sticking with the hash method, enter the same rolls into two signers from different vendors and compare all 24 words. No PC anywhere. The cost is a second device bought for the purpose, which is a real expense but a cheap one next to the balance it protects.
 
-They have to share the construction. Coldcard, SeedSigner and Keystone agree; **Krux does not**, because it dash-separates before hashing.
+They have to share the construction. Coldcard, SeedSigner, Keystone and Krux on D6 all agree. The one to watch is Krux's **D20** mode, which dash-separates by design and therefore has nothing to cross-check against, since no other mainstream tool takes twenty-sided dice.
 
 ### 3. An amnesic offline computer, with the rule everyone skips
 
