@@ -693,6 +693,10 @@ Dice fix that by removing the unobservable step. You generate the entropy in the
 
 Roll 100. Write them as one unbroken run of digits. Check the hash offline. Then go outside.
 
+---
+
+*I wrote a shorter version of this argument for [Lygos](https://lygos.finance/blog/roll-your-own-bitcoin-seed), where I'm a cofounder. It's aimed at people who hold Bitcoin as collateral rather than at people who wanted the entropy maths, and there's a [plain step-by-step](https://lygos.finance/blog/how-to-roll-dice-for-your-bitcoin-wallet) alongside it if you'd rather hand someone that than this.*
+
 ## Sources
 
 - Coinkite: [Security Advisory](https://blog.coinkite.com/coldcard-mk3-seed-generation-warning/) and [Technical Backgrounder](https://blog.coinkite.com/entropy-technical-backgrounder/)

@@ -224,3 +224,5 @@ Fifteen minutes, and the most important number in your Bitcoin setup is one you 
 ---
 
 *Want to know exactly why 100 rolls, what the wallet does with your numbers, and how to check its work with a hash you can verify yourself? That's all in the technical version: [How to Safely Roll Dice for Your Bitcoin Seed]({% post_url 2026-08-03-how-to-safely-roll-dice-for-your-bitcoin-seed %}).*
+
+*For why any of this matters if you ever borrow against your Bitcoin, I made the same case at [Lygos](https://lygos.finance/blog/roll-your-own-bitcoin-seed), where I'm a cofounder.*
