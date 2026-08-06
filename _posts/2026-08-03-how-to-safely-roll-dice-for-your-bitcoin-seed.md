@@ -14,7 +14,7 @@ image:
 mermaid: true
 ---
 
-*A five year old firmware bug just cost people ~1,367 BTC. The one seed-generation method that came through untouched was the one where a human rolled dice on a table. Here's how to do it properly, including a formatting trap that will hand you a completely different wallet and convince you you've been hacked.*
+*A five year old firmware bug has cost people at least 1,400 BTC and counting. The one seed-generation method that came through untouched was the one where a human rolled dice on a table. Here's how to do it properly, including a formatting trap that will hand you a completely different wallet and convince you you've been hacked.*
 
 > **This is the technical version.** It gets into entropy maths, hash functions and source code. If you just want the steps (buy dice, roll them, write them down correctly), read [Rolling Dice for Your Bitcoin Wallet: The Simple Guide]({% post_url 2026-08-03-rolling-dice-for-your-bitcoin-wallet-simple-guide %}) instead. You won't miss anything you need in order to do this safely.
 {: .prompt-info }
@@ -26,7 +26,9 @@ mermaid: true
 
 ## 🎲 Why everyone is suddenly asking about dice
 
-On July 30, 2026, roughly 1,083 BTC left ~1,196 addresses in about 41 minutes. By August 2, [Galaxy Research](https://x.com/intangiblecoins) put the running total at **~1,367 BTC (~$88.6M) across 4,585 addresses**. Nobody touched a single physical device.
+On July 30, 2026, roughly 1,083 BTC left ~1,196 addresses in about 41 minutes. The number has kept climbing since. As of August 5, [Coldcard Sweep Watch](https://coldcardwatch.com/) puts the **verified** total at **~1,403 BTC**, every address checked transaction by transaction, and a further **~2,055 BTC across roughly 7,700 addresses** in the *suspected* set, which [Galaxy Research](https://x.com/intangiblecoins) rates medium-high confidence without victim confirmation yet.
+
+Take the verified number as a floor rather than a total, which is how the trackers themselves frame it: undiscovered clusters are near certain, and other attackers are working the same flaw with their own patterns. Nobody touched a single physical device.
 
 The cause was a build flag. When Coinkite migrated Coldcard's elliptic-curve work to `libsecp256k1` in March 2021, seed generation moved from `ckcc.rng_bytes()` to `ngu.random.bytes()`. Both had identical signatures, so nothing complained. But the guard selecting the implementation looked like this:
 
@@ -653,7 +655,7 @@ The rule people miss is on the other end. Everyone wipes the machine *before* th
 
 ### 4. Don't verify
 
-Not an option. This is a return to trusting the black box, which is the thing that just cost people 1,367 BTC.
+Not an option. This is a return to trusting the black box, which is the thing that has now cost people at least 1,400 BTC.
 
 ### The residual that no method escapes
 
