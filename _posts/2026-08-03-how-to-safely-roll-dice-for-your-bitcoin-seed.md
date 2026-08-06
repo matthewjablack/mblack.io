@@ -19,6 +19,9 @@ mermaid: true
 > **This is the technical version.** It gets into entropy maths, hash functions and source code. If you just want the steps (buy dice, roll them, write them down correctly), read [Rolling Dice for Your Bitcoin Wallet: The Simple Guide]({% post_url 2026-08-03-rolling-dice-for-your-bitcoin-wallet-simple-guide %}) instead. You won't miss anything you need in order to do this safely.
 {: .prompt-info }
 
+> **Correction, 5 August 2026.** This post previously said Krux hashes dice rolls differently from Coldcard and SeedSigner, and so produces a different seed from the same dice. That was wrong. Krux dropped the separator for D6 in v22.08.0 in August 2022; I was citing a thread from a month earlier and missed the fix. The companion post carried the same error plus a worked example I had labelled as real Krux output when it was in fact my own simulation. [Full correction and how I checked it properly this time]({% post_url 2026-08-03-dice-for-a-trezor-ledger-or-any-wallet %}). Thanks to [@matijaoe](https://x.com/matijaoe) for the catch.
+{: .prompt-warning }
+
 ---
 
 ## 🎲 Why everyone is suddenly asking about dice
