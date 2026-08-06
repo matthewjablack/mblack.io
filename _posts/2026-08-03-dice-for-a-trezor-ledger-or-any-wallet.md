@@ -19,8 +19,6 @@ image:
 >
 > Krux stopped dash-separating D6 rolls in **v22.08.0, on 10 August 2022**, specifically for consistency with Coldcard and SeedSigner. My source was [a forum thread from 15 July 2022](https://github.com/selfcustody/krux/discussions/138), fixed under a month later. I quoted the complaint and missed the fix.
 >
-> Worse: I labelled those mnemonic words as real Krux output and wrote that they were "real output, not a hypothetical." They were not. I hashed a dash-joined string myself and never ran Krux. For a post about verifying instead of trusting, that is the exact mistake it warns about, and the footnote I attached only ever covered the Coldcard check.
->
 > Thanks to [@matijaoe](https://x.com/matijaoe), who cross-checked it on real hardware and told me. The section below is rewritten, and I have [reproduced Krux's own test vector](#krux-check) rather than taking anyone's word for it this time.
 {: .prompt-warning }
 
