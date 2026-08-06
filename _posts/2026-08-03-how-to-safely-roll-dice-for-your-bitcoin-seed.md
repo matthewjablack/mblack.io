@@ -623,6 +623,18 @@ Also note what that reroll rule does to the bias question from [earlier](#how-fa
 > Budget for it honestly. Rerolls mean about 1.5 throws per die, so 23 words costs roughly **172 die rolls and 23 coin flips**, against 100 rolls for the hash method. You are buying verifiability with your evening.
 {: .prompt-info }
 
+**A tangent, because it is a nice bit of arithmetic.** Nothing about this is specific to six-sided dice. [@hk_collins](https://x.com/hk_collins) asked whether you could do it with D20s and D10s instead, and you can. The only requirement is 11 bits per word, because the word list is `2^11 = 2048`. Reroll any die into a power-of-two range and the bits simply add:
+
+| Die | Keep | Reroll | Bits |
+|---|---|---|---|
+| D6 | 1 to 4 | 5, 6 | 2 |
+| D10 | 1 to 8 | 9, 10 | 3 |
+| D20 | 1 to 16 | 17 to 20 | 4 |
+
+Five D6 plus a coin is `2+2+2+2+2+1 = 11`, which is BitBox's method. But two D20s and one D10 is `4+4+3 = 11` just as exactly, and it is faster: about **86 throws** for 23 words, against 172 with D6. Four dice would work too, though `20 × 20 × 10 × 10 = 40,000` is not divisible by 2048, so roughly 2.7% of throws get discarded. The factors of five in a D10 never cancel against a power of two.
+
+**Use BitBox's table anyway.** Its page, row and column lookup requires no arithmetic at all, and hand-computing a word index 23 times is exactly where a long evening produces a mistake. But the freedom is real, and worth understanding for one reason: because you are *choosing* words rather than feeding a string to a hash, no other tool ever has to reproduce your dice scheme. That is the opposite of the [formatting trap](#-the-formatting-trap), where a single space changes everything.
+
 Now verification is just reading. The 23 words on the screen either match the 23 on your paper or they don't. No hashing, no second tool, no script. **You chose the entropy, so there is no claim left for the device to lie about.** Three properties make this stronger than it first looks:
 
 - **The device's influence is nil.** A 24-word seed is 23 freely chosen words (253 bits) plus a final word carrying 3 entropy bits and 8 checksum bits. That leaves exactly **8 valid final words** out of 2048, and in BitBox's flow the device offers them and *you* pick. For 12 words it's 11 free words and 128 valid finals.
